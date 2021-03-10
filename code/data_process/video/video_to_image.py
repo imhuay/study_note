@@ -15,7 +15,7 @@ import os
 import cv2
 
 
-def video2image(video_path, save_dir, n_frame=None, n_step=None):
+def video_to_image(video_path, save_dir=None, n_frame=None, n_step=None):
     """
     视频抽帧
 
@@ -26,7 +26,7 @@ def video2image(video_path, save_dir, n_frame=None, n_step=None):
         n_step: 按固定间隔抽帧
 
     Returns:
-        None
+        np.ndarray list
     """
     assert n_frame is None or n_step is None, '不同时设置 n_frame 和 n_step'
     os.makedirs(save_dir, exist_ok=True)
@@ -43,15 +43,17 @@ def video2image(video_path, save_dir, n_frame=None, n_step=None):
 
     if n_frame is not None:
         n_step = len(frame_ls) // n_frame + 1 if len(frame_ls) % n_frame != 0 else len(frame_ls) // n_frame
+        frame_ls = frame_ls[::n_step] if n_step > 0 else frame_ls
 
-    final_frame_ls = frame_ls[::n_step] if n_step is not None and n_step > 0 else frame_ls
+    if save_dir:
+        for frame_id, frame in enumerate(frame_ls):
+            cv2.imwrite(os.path.join(save_dir, '%.04d.jpg' % (frame_id + 1)), frame)
 
-    for frame_id, frame in enumerate(final_frame_ls):
-        cv2.imwrite(os.path.join(save_dir, '%.04d.jpg' % (frame_id + 1)), frame)
+    return frame_ls
 
 
 if __name__ == '__main__':
     """"""
-    video_path = r'../_test_data/v_ApplyEyeMakeup_g01_c01.avi'
-    save_dir = r'../_test_data/out'
-    video2image(video_path, save_dir, n_step=10)
+    _video_path = r'../_test_data/v_ApplyEyeMakeup_g01_c01.avi'
+    _save_dir = r'../_test_data/out'
+    _frame_ls = video_to_image(_video_path, _save_dir, n_step=10)
