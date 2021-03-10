@@ -13,9 +13,10 @@ Subject:
 
 import os
 import cv2
+import numpy as np
 
 
-def video_to_image(video_path, save_dir=None, n_frame=None, n_step=None):
+def video_to_image(video_path, save_dir=None, n_frame=None, n_step=None, resize=None, return_array=False):
     """
     视频抽帧
 
@@ -24,36 +25,46 @@ def video_to_image(video_path, save_dir=None, n_frame=None, n_step=None):
         save_dir: 图像保存文件夹
         n_frame: 按固定帧数抽帧
         n_step: 按固定间隔抽帧
+        resize: 调整图像大小，格式为 (w, h)
+        return_array: 是否转化为 np.array，默认为 list of 每一帧的 np.array
 
-    Returns:
-        np.ndarray list
     """
-    assert n_frame is None or n_step is None, '不同时设置 n_frame 和 n_step'
+    if n_frame and n_step:
+        raise ValueError('不能同时设置 n_frame 和 n_step.')
+
     os.makedirs(save_dir, exist_ok=True)
 
     cap = cv2.VideoCapture(video_path)
     fps = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    # print(fps)
 
-    frame_ls = []
+    frames = []
     for _ in range(fps):
         ret, frame = cap.read()
         if ret:
-            frame_ls.append(frame)
+            frames.append(frame)
 
-    if n_frame is not None:
-        n_step = len(frame_ls) // n_frame + 1 if len(frame_ls) % n_frame != 0 else len(frame_ls) // n_frame
-        frame_ls = frame_ls[::n_step] if n_step > 0 else frame_ls
+    if n_frame:
+        n_step = len(frames) // n_frame + 1 if len(frames) % n_frame != 0 else len(frames) // n_frame
+
+    if n_step:
+        frames = frames[::n_step] if n_step > 0 else frames
+
+    if resize:
+        frames = [cv2.resize(f, resize) for f in frames]
 
     if save_dir:
-        for frame_id, frame in enumerate(frame_ls):
+        for frame_id, frame in enumerate(frames):
             cv2.imwrite(os.path.join(save_dir, '%.04d.jpg' % (frame_id + 1)), frame)
 
-    return frame_ls
+    if return_array:
+        frames = np.stack(frames)
+
+    return frames
 
 
 if __name__ == '__main__':
     """"""
     _video_path = r'../_test_data/v_ApplyEyeMakeup_g01_c01.avi'
-    _save_dir = r'../_test_data/out'
-    _frame_ls = video_to_image(_video_path, _save_dir, n_step=10)
+    _save_dir = r'../_test_data/-out'
+    _frames = video_to_image(_video_path, _save_dir, resize=(224, 224), n_frame=10, n_step=10, return_array=True)
+    print(_frames.shape)  # (10, 224, 224, 3)
