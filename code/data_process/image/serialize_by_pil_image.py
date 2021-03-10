@@ -25,12 +25,26 @@ import numpy as np
 from PIL import Image
 
 
-def load_image(image, color_mode='RGB'):
+def save_image(image: Image.Image, save_path):
+    """
+    保存图像
+
+    Args:
+        image:
+        save_path:
+
+    Returns:
+
+    """
+    image.save(save_path)
+
+
+def load_image(src, color_mode='RGB'):
     """
     加载原始图像，返回 PIL.Image 对象
 
     Args:
-        image: 图像路径，或二进制数据
+        src: 图像路径，或二进制数据
         color_mode: 颜色模式，支持 {"L","RGB","RGBA"} 种类型，对应的 shape 分别为 (w, h)、(w, h, 3)、(w, h, 4)
 
     Returns:
@@ -39,10 +53,10 @@ def load_image(image, color_mode='RGB'):
     if color_mode not in {"L", "RGB", "RGBA"}:
         raise ValueError('Unsupported color_mode: %s, it must be one of {"L", "RGB", "RGBA"}' % color_mode)
 
-    if isinstance(image, bytes):
-        img = Image.open(io.BytesIO(image))
+    if isinstance(src, bytes):
+        img = Image.open(io.BytesIO(src))
     else:
-        with open(image, 'rb') as f:
+        with open(src, 'rb') as f:
             img = Image.open(io.BytesIO(f.read()))
 
     if img.mode != color_mode:
@@ -70,7 +84,7 @@ def image_to_tensor(image, dtype='float32'):
     return x
 
 
-def tensor_to_image(x, scale=True, dtype='float32'):
+def tensor_to_image(x, scale=False, dtype='float32'):
     """
     将 numpy 数组转为 PIL.Image 对象
 
@@ -109,12 +123,12 @@ def tensor_to_image(x, scale=True, dtype='float32'):
 
 if __name__ == '__main__':
     """"""
-    obj = open('../_test_data/pok.jpg', 'rb').read()
-    img = load_image(obj, color_mode='RGB')
-    print(isinstance(img, Image.Image))
+    _obj = open('../_test_data/pok.jpg', 'rb').read()
+    _img = load_image(_obj, color_mode='RGB')
+    print(isinstance(_img, Image.Image))
 
-    x = image_to_tensor(img)
-    print(x.shape)
+    _x = image_to_tensor(_img)
+    print(_x.shape)
 
-    img = tensor_to_image(x)
-    print(isinstance(img, Image.Image))
+    _img = tensor_to_image(_x)
+    print(isinstance(_img, Image.Image))
