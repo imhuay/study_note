@@ -1,6 +1,7 @@
 # 文件夹
 .idea/
-out/
+_out/
+.pytest_cache/
 
 # 临时文件
 *.iml
