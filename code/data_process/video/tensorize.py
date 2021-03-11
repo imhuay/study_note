@@ -16,17 +16,17 @@ import cv2
 import numpy as np
 
 
-def video_to_image(video_path, save_dir=None, n_frame=None, n_step=None, resize=None, return_array=False):
+def video_to_tensor(video_path, n_frame=None, n_step=None, resize=None, return_array=False, save_dir=None):
     """
-    视频抽帧
+    视频转张量
 
     Args:
         video_path: 视频路径
-        save_dir: 图像保存文件夹
         n_frame: 按固定帧数抽帧
         n_step: 按固定间隔抽帧
         resize: 调整图像大小，格式为 (w, h)
         return_array: 是否转化为 np.array，默认为 list of 每一帧的 np.array
+        save_dir: 图像保存文件夹
 
     """
     if n_frame and n_step:
@@ -66,5 +66,5 @@ if __name__ == '__main__':
     """"""
     _video_path = r'../_test_data/v_ApplyEyeMakeup_g01_c01.avi'
     _save_dir = r'../_test_data/-out'
-    _frames = video_to_image(_video_path, _save_dir, resize=(224, 224), n_frame=10, n_step=10, return_array=True)
+    _frames = video_to_tensor(_video_path, n_frame=10, resize=(224, 224), return_array=True, save_dir=_save_dir)
     print(_frames.shape)  # (10, 224, 224, 3)
