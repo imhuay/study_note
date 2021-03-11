@@ -32,8 +32,6 @@ def video_to_tensor(video_path, n_frame=None, n_step=None, resize=None, return_a
     if n_frame and n_step:
         raise ValueError('不能同时设置 n_frame 和 n_step.')
 
-    os.makedirs(save_dir, exist_ok=True)
-
     cap = cv2.VideoCapture(video_path)
     fps = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
@@ -53,6 +51,7 @@ def video_to_tensor(video_path, n_frame=None, n_step=None, resize=None, return_a
         frames = [cv2.resize(f, resize) for f in frames]
 
     if save_dir:
+        os.makedirs(save_dir, exist_ok=True)
         for frame_id, frame in enumerate(frames):
             cv2.imwrite(os.path.join(save_dir, '%.04d.jpg' % (frame_id + 1)), frame)
 
