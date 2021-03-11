@@ -2,7 +2,7 @@
 .idea/
 _out/
 .pytest_cache/
-model_file/*/*
+model_file/
 
 # 临时文件
 *.iml
