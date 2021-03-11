@@ -50,13 +50,13 @@ def video_to_tensor(video_path, n_frame=None, n_step=None, resize=None, return_a
     if resize:
         frames = [cv2.resize(f, resize) for f in frames]
 
+    if return_array:
+        frames = np.stack(frames)
+
     if save_dir:
         os.makedirs(save_dir, exist_ok=True)
         for frame_id, frame in enumerate(frames):
             cv2.imwrite(os.path.join(save_dir, '%.04d.jpg' % (frame_id + 1)), frame)
-
-    if return_array:
-        frames = np.stack(frames)
 
     return frames
 
