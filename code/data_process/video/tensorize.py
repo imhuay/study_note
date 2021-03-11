@@ -8,7 +8,7 @@ Author:
     huayang
     
 Subject:
-    视频转图像（抽帧）
+    视频张量化
 """
 
 import os
