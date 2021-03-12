@@ -15,7 +15,7 @@ Subject:
         video_tensor = ...  # [n, w, h, c]
         feature = Xception.predict(video_tensor)  # [n, w', h', f]
         视情况决定是否再接一个 GlobalPooling 层，得到 shape=[n, f] 的特征
-    3. 下面的过程跟一般
+    3. 下面的过程跟一般分类模型类似
 
 """
 import argparse
@@ -37,7 +37,6 @@ def get_args():
     p = argparse.ArgumentParser()
     args = p.parse_args()
 
-    # TODO
     file_path_ls = []
     label_ls = []
 
