@@ -8,15 +8,15 @@ Author:
     huayang
     
 Subject:
-    图片张量化，提供了基于 PIL 和 cv2 的两种方法；
-    一般建议使用 cv2，其操作即中间结果均基于 np.ndarray；
-    而 PIL 会先将图片转为 Image 实例，再进行操作（API 更直观）
+    图片张量化，提供了基于 PIL、cv2、tf 的三种方法；
+    三种方法获取的张量会存在差异（但是应该没问题，使用它们重新另存的图片未改变，模型不至于处理不了这种程度的泛化）
 
 Note:
-    基于 base64 的序列化方法详见：python_utils/basic_utils/serialize.py
-
-    - 库版本
-        - tensorflow >= 2.0
+    - 基于 base64 的序列化方法可以参考：python_utils/basic_utils/serialize.py
+    - 使用 tf 版本需要 tensorflow >= 2.0（用到了 x.numpy()）
+    - cv2 读取的图片默认通道顺序为 bgr，这个需要注意：
+        - 如果要把 cv2 读取的图片用其他库处理，则需要先调整为 rgb；反之其他库处理的图片传给 cv2，需要先转回 bgr；
+        - 换言之，尽量使用同一套库，要么都用 cv2 处理，要么都不用；
 
 References:
     keras.preprocessing.image
@@ -25,11 +25,58 @@ import io
 
 import cv2
 import numpy as np
+import tensorflow as tf
 from PIL import Image
 
 
-class TensorizeByPIL(object):
+def tensor_to_image(x, save_path=None, scale=False):
+    """
+    将 numpy 数组转为 PIL.Image 对象
 
+    Args:
+        x:
+        save_path:
+        scale:
+
+    """
+    x = np.asarray(x, np.float32)
+    if x.ndim != 3:
+        raise ValueError('Unsupported tensor dim: %s, it must be 3' % len(x.shape))
+
+    if scale:
+        x = x - np.min(x)
+        x_max = np.max(x)
+        if x_max != 0:
+            x /= x_max
+        x *= 255
+
+    n_channel = x.shape[2]
+    if n_channel == 3:
+        color_mode = 'RGB'
+    elif n_channel == 4:
+        color_mode = 'RGBA'
+    elif n_channel == 1:
+        x = x[:, :, 0]
+        if np.max(x) > 255:
+            color_mode = 'I'
+        else:
+            color_mode = 'L'
+    else:
+        raise ValueError('Unsupported channel number: %s, it must be one of {1, 3, 4}' % n_channel)
+
+    dtype = np.uint8
+    if color_mode == 'I':
+        dtype = np.int32
+
+    img = Image.fromarray(x.astype(dtype), color_mode)
+
+    if save_path:
+        img.save(save_path)
+
+    return img
+
+
+class Tensorize(object):
     @staticmethod
     def load_image(src, color_mode='RGB'):
         """
@@ -41,7 +88,7 @@ class TensorizeByPIL(object):
 
         Returns: Image.Image
         """
-        if color_mode not in {"I", "L", "RGB", "RGBA"}:
+        if color_mode not in {"L", "RGB", "RGBA"}:
             raise ValueError('Unsupported color_mode: %s, it must be one of {"L", "RGB", "RGBA"}' % color_mode)
 
         if isinstance(src, bytes):
@@ -56,7 +103,7 @@ class TensorizeByPIL(object):
         return img
 
     @staticmethod
-    def image_to_tensor(img, resize=None, color_mode='RGB', dtype=np.uint8):
+    def by_pil(img, resize=None, color_mode='RGB', dtype=np.uint8):
         """
         将 PIL.Image 对象转为 numpy 数组
 
@@ -70,7 +117,7 @@ class TensorizeByPIL(object):
 
         """
         if isinstance(img, (str, bytes)):
-            img = TensorizeByPIL.load_image(img, color_mode=color_mode)
+            img = Tensorize.load_image(img, color_mode=color_mode)
 
         if resize:
             img = img.resize(size=resize)
@@ -82,58 +129,15 @@ class TensorizeByPIL(object):
         return x
 
     @staticmethod
-    def tensor_to_image(x, save_path=None, scale=False):
+    def by_cv2(img, resize=None, color_mode=cv2.IMREAD_COLOR, convert_to_rgb=True):
         """
-        将 numpy 数组转为 PIL.Image 对象
-
         Args:
-            x:
-            save_path:
-            scale:
+            img:
+            resize:
+            color_mode: 默认 cv2.IMREAD_COLOR
+            convert_to_rgb: 是否将通道顺序转为 'RGB'，cv2 默认的通道顺序为 'BGR'
 
         """
-        x = np.asarray(x, np.float32)
-        if x.ndim != 3:
-            raise ValueError('Unsupported tensor dim: %s, it must be 3' % len(x.shape))
-
-        if scale:
-            x = x - np.min(x)
-            x_max = np.max(x)
-            if x_max != 0:
-                x /= x_max
-            x *= 255
-
-        n_channel = x.shape[2]
-        if n_channel == 3:
-            color_mode = 'RGB'
-        elif n_channel == 4:
-            color_mode = 'RGBA'
-        elif n_channel == 1:
-            x = x[:, :, 0]
-            if np.max(x) > 255:
-                color_mode = 'I'
-            else:
-                color_mode = 'L'
-        else:
-            raise ValueError('Unsupported channel number: %s, it must be one of {1, 3, 4}' % n_channel)
-
-        dtype = np.uint8
-        if color_mode == 'I':
-            dtype = np.int32
-
-        img = Image.fromarray(x.astype(dtype), color_mode)
-
-        if save_path:
-            img.save(save_path)
-
-        return img
-
-
-class TensorizeByCV2(object):
-
-    @staticmethod
-    def image_to_tensor(img, resize=None, color_mode=cv2.IMREAD_COLOR):
-        """"""
         if isinstance(img, str):
             with open(img, 'rb') as f:
                 img = f.read()
@@ -143,54 +147,53 @@ class TensorizeByCV2(object):
         if resize:
             x = cv2.resize(x, dsize=resize)
 
+        if convert_to_rgb:
+            x = cv2.cvtColor(x, cv2.COLOR_BGR2RGB)
+
         return x
 
     @staticmethod
-    def tensor_to_image(x, save_path, scale=False):
-        """"""
-        if scale:
-            x = x - np.min(x)
-            x_max = np.max(x)
-            if x_max != 0:
-                x /= x_max
-            x *= 255
+    def by_tf(img, resize=None, return_numpy=False, expand_animations=False):
+        """
+        Args:
+            img:
+            resize:
+            return_numpy:
+            expand_animations: 默认 False，即 gif 只取第一帧
+        """
+        if isinstance(img, str):
+            with open(img, 'rb') as f:
+                img = f.read()
 
-        cv2.imwrite(save_path, x)
+        x = tf.io.decode_image(img, channels=3, expand_animations=expand_animations)
+
+        if resize:
+            x = tf.image.resize(x, size=resize)
+
+        if return_numpy:
+            x = x.numpy()
+
+        return x
 
 
-Tensorize = TensorizeByCV2
-
-
-def _test_TensorizeByPIL():
+def _test():
     """"""
-    _obj = open('../_test_data/pok.jpg', 'rb').read()
-    _img = TensorizeByPIL.load_image(_obj)
-    print(isinstance(_img, Image.Image))
+    src = '../_test_data/pok.jpg'
+    # src = open(src, 'br').read()
 
-    _x = np.asarray(_img)
-    print(np.max(_x))
+    x1 = Tensorize.by_pil(src)
+    tensor_to_image(x1, '../_test_data/-out/pok_pil.jpg')
+    x2 = Tensorize.by_cv2(src)
+    print(x2.shape)
+    tensor_to_image(x2, '../_test_data/-out/pok_cv2.jpg')
+    print((x1 == x2).all())  # False
 
-    _x = TensorizeByPIL.image_to_tensor(_img, resize=(224, 224))
-    print(_x.shape)
-    print(_x.dtype)
-
-    _save_path = '../_test_data/-out/pok.jpg'
-    _img = TensorizeByPIL.tensor_to_image(_x, save_path=_save_path)
-    print(isinstance(_img, Image.Image))
-
-
-def _test_TensorizeByCV2():
-    """"""
-    _obj = open('../_test_data/pok.jpg', 'rb').read()
-    _x = TensorizeByCV2.image_to_tensor(_obj, resize=(224, 224))
-    print(_x.shape)
-    print(_x.dtype)
-
-    _save_path = '../_test_data/-out/pok.jpg'
-    TensorizeByCV2.tensor_to_image(_x, _save_path)
+    x3 = Tensorize.by_tf(src, return_numpy=True)
+    print((x1 == x3).all())  # False
+    print((x2 == x3).all())  # False
+    tensor_to_image(x3, '../_test_data/-out/pok_tf.jpg')
 
 
 if __name__ == '__main__':
     """"""
-    # _test_TensorizeByPIL()
-    _test_TensorizeByCV2()
+    _test()
