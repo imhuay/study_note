@@ -100,6 +100,15 @@ cookie1 2015-04-10      1       7       6       7       4
 
 ### 分段采样
 ```sql
+-- 有类别标签
+SELECT query, qv, label
+FROM (
+    SELECT query, qv, label, row_number() over(partition by label order by rand()) row_num  -- 打乱每堆内部
+    FROM FROM some_table
+) B
+WHERE row_num <= 300  -- 每堆采样 300 条
+
+-- 无类别标签
 SELECT query, qv, heap
 FROM (
     SELECT query, qv, heap, row_number() over(partition by heap order by rand()) row_num  -- 打乱每堆内部
