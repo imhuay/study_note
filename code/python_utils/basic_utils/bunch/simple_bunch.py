@@ -8,14 +8,12 @@ Author:
     huayang
     
 Subject:
-    
+    利用 python dict 实现简单的 Bunch 模式
 """
 
 
 class Bunch(dict):
     """
-    利用 python dict 实现基础 Bunch 模式
-
     Examples:
 
         >>> b = Bunch(a=1, b=2)
