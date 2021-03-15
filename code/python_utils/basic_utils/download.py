@@ -96,9 +96,9 @@ def download_multi_thread(save_dir, download_func, arg_ls, n_thread=None, use_it
 if __name__ == '__main__':
     """"""
     args = [
-        ('https://www.baidu.com/', './_out/baidu1.html'),
-        ('https://www.baidu.com/', './_out/baidu2.html'),
-        ('https://www.baidu.com/', './_out/baidu3.html'),
+        ('https://www.baidu.com/', './-out/baidu1.html'),
+        ('https://www.baidu.com/', './-out/baidu2.html'),
+        ('https://www.baidu.com/', './-out/baidu3.html'),
     ]
 
-    download_multi_thread('./_out', download_once, args)
+    download_multi_thread('-out', download_once, args)

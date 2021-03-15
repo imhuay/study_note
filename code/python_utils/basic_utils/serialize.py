@@ -13,6 +13,11 @@ Subject:
 import base64
 
 
+def file_to_str(file_path, encoding='utf8'):
+    with open(file_path, 'rb') as f:
+        return byte_to_str(f.read(), encoding=encoding)
+
+
 def byte_to_str(byte_obj, encoding='utf8'):
     """"""
     return base64.b64encode(byte_obj).decode(encoding)
@@ -25,22 +30,27 @@ def str_to_byte(byte_str, encoding='utf8'):
 if __name__ == '__main__':
     """"""
     # 文本文件
-    obj = open('../../_test_data/test.txt', 'rb').read()
+    obj = open('-data/test.txt', 'rb').read()
     s = byte_to_str(obj)
     obj_str = str_to_byte(s)
-    with open('../../_test_data/out/test.txt', 'wb') as f:
+    with open('-out/test.txt', 'wb') as f:
         f.write(obj_str)
 
     # 图片
-    obj = open('../../_test_data/pok.jpg', 'rb').read()
+    obj = open('-data/pok.jpg', 'rb').read()
     s = byte_to_str(obj)
     obj_str = str_to_byte(s)
-    with open('../../_test_data/out/pok.jpg', 'wb') as f:
+    with open('-out/pok.jpg', 'wb') as f:
         f.write(obj_str)
 
     # 视频
-    obj = open('../../_test_data/v_ApplyEyeMakeup_g01_c01.avi', 'rb').read()
+    obj = open('-data/v_ApplyEyeMakeup_g01_c01.avi', 'rb').read()
     s = byte_to_str(obj)
     obj_str = str_to_byte(s)
-    with open('../../_test_data/out/v_ApplyEyeMakeup_g01_c01.avi', 'wb') as f:
+    with open('-out/v_ApplyEyeMakeup_g01_c01.avi', 'wb') as f:
         f.write(obj_str)
+
+    s = file_to_str(r'-data/14522667.jpg')
+    print(len(s))
+    with open('-out/14522667.txt', 'w') as f:
+        f.write(s)
