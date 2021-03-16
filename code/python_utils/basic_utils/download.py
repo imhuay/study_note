@@ -69,7 +69,7 @@ def download_multi_thread(save_dir, download_func, arg_ls, n_thread=None, use_it
         download_func: 下载函数
         arg_ls: 参数列表
         n_thread: 线程数
-        use_iter: 是否使用迭代器模式，默认为 False，即使用生成器模式，为 True 时使用迭代器模式
+        use_iter: 是否使用迭代器模式，默认为 True，否则使用生成器模式
             显式区别在于 tqdm ：
                 生成器为 2it [00:00, 16.88it/s]，
                 迭代器为 100%|██████████| 2/2 [00:00<00:00, 16.88it/s]
