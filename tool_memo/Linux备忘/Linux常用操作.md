@@ -48,7 +48,10 @@ Index
 
 #### 不需要保持终端运行 - `nohup` 命令
 - 命令格式：`nohup [command] &`；<br/>
-    > nohup命令会忽略SIGHUP信号，从而终端退出时不会影响到后台作业
+    - `nohup` 命令会忽略 SIGHUP 信号，从而终端退出时不会影响到后台作业；
+    - 通过 `nohup` 运行的程序，其输出信息将不会显示到终端，默认输出到当前目录的 `nohup.out` 文件中；如果当前目录的 `nohup.out` 文件不可写，则输出重定向到 `$HOME/nohup.out` 文件中；
+    - 也可以指定输出文件，如 `nohup command &>log.txt &`
+
 
 #### 把执行中的命令转到后台
 1. `Ctrl+Z`：将当前在前台执行的程序在后台挂起；<br/>

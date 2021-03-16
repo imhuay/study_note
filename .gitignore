@@ -11,6 +11,7 @@ model_file/
 -*
 
 # 指定文件
+nohup.out
 git-push-abs_mt.sh
 # git_push.sh
 # git_pull.sh
