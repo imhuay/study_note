@@ -18,8 +18,10 @@ Subject:
     3. 下面的过程跟一般分类模型类似
 
 """
+import os
 import argparse
 
+import numpy as np
 import tensorflow as tf
 
 try:
@@ -29,7 +31,7 @@ except:
     import keras
     import keras.backend as K
 
-from utils import video_to_tensor
+from utils.tensorize import video_to_tensor
 
 
 def get_args():
@@ -37,16 +39,19 @@ def get_args():
     p = argparse.ArgumentParser()
     args = p.parse_args()
 
+    # args = Bunch()
+
     file_path_ls = []
     label_ls = []
-
     # 赋值相关参数
     args.file_path_ls = file_path_ls
     args.label_ls = label_ls
     args.n_frame = 10
-    args.n_feature = 2048  # 是预训练模型而定
+    args.n_feature = 2048  # 视预训练模型而定
     args.n_class = 8
     args.n_epoch = 10
+    args.target_shape = (args.n_frame, args.n_feature)
+    args.weights_file = r'../model_file/xception/xception_weights_tf_dim_ordering_tf_kernels_notop.h5'
 
     return args
 
@@ -70,14 +75,23 @@ def get_feature_extractor(weights_file):
     return model
 
 
-def get_video_feature(feature_extractor: keras.Model, video_tensor_ls):
+def get_video_feature(feature_extractor: keras.Model, file_path_ls, label_ls, n_frame, target_shape):
     """"""
+    assert len(file_path_ls) == len(label_ls)
+
     feature_ls = []
-    for vt in video_tensor_ls:
+    new_label_ls = []
+    for fp, label in zip(file_path_ls, label_ls):
+        vt = video_to_tensor(fp, n_frame=n_frame)
         fe = feature_extractor.predict(vt)
+
+        if fe.shape != target_shape:
+            continue
+
+        new_label_ls.append(label)
         feature_ls.append(fe)
 
-    return feature_ls
+    return feature_ls, new_label_ls
 
 
 def get_dataset(feature_ls, label_ls, batch_size=8):
@@ -105,20 +119,27 @@ def main():
     """"""
     args = get_args()
 
-    video_tensor_ls = get_video_tensor(args.file_path_ls, n_frame=args.n_frame)
+    if not os.path.exists(args.inputs_save_path):
+        feature_extractor = get_feature_extractor(args.weights_file)
+        feature_ls, label_ls = get_video_feature(feature_extractor,
+                                                 args.file_path_ls,
+                                                 args.label_ls,
+                                                 args.n_frame,
+                                                 args.target_shape)
+        # 保存
+        np.savez(args.inputs_save_path, features=feature_ls, labels=label_ls)
+    else:
+        tmp = np.load(args.inputs_save_path)
+        feature_ls = tmp['features']
+        label_ls = tmp['labels']
 
-    weights_file = r'../model_file/xception/xception_weights_tf_dim_ordering_tf_kernels_notop.h5'
-    feature_extractor = get_feature_extractor(weights_file)
-    feature_ls = get_video_feature(feature_extractor, video_tensor_ls)
-
-    ds_train = get_dataset(feature_ls, args.label_ls)
+    ds_train = get_dataset(feature_ls, label_ls)
 
     model = build_model(args)
-
     model.fit(ds_train, epochs=args.n_epoch)
 
 
-def demo():
+def _test():
     """"""
     videl_path = r'/Users/huayang/workspace/my/study_note/code/data_process/_test_data/v_ApplyEyeMakeup_g01_c01.avi'
     t = video_to_tensor(videl_path, n_frame=10)
@@ -132,4 +153,4 @@ def demo():
 
 if __name__ == '__main__':
     """"""
-    demo()
+    _test()
