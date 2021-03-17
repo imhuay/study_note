@@ -15,7 +15,7 @@ import numpy as np
 import tensorflow as tf
 
 
-def split(*arrays, val_size=0.2, random_seed=1, shuffle=False):
+def split(*arrays, val_size=0.25, random_seed=1, shuffle=False):
     """
     将数据按比例切分
 
