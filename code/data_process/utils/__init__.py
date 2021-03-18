@@ -41,10 +41,3 @@ def safe_indexing(x, indices=None):
             return x.copy().iloc[indices]
     else:  # for python
         return [x[idx] for idx in indices]
-
-
-if __name__ == '__main__':
-    """"""
-    import sklearn.model_selection as ms
-    ms.train_test_split()
-
