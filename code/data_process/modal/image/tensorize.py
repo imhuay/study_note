@@ -214,8 +214,8 @@ def _test_save():
     src = '../_test_data/pok.jpg'
     img = Tensorize.load_image(src, 'RGB')
     img = img.convert('L')
-    # plt.imshow(img)
-    # plt.show()
+    plt.imshow(img)
+    plt.show()
 
     tensor_to_image(img, '../_test_data/-out/pok_L.jpg')
 

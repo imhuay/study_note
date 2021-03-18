@@ -16,7 +16,8 @@ import cv2
 import numpy as np
 
 
-def video_to_tensor(video_path, n_frame=None, n_step=None, resize=None, return_numpy=False, save_dir=None):
+def video_to_tensor(video_path, n_frame=None, n_step=None, resize=None, return_numpy=False, save_dir=None,
+                    convert_to_rgb=True):
     """
     视频转张量
 
@@ -27,6 +28,7 @@ def video_to_tensor(video_path, n_frame=None, n_step=None, resize=None, return_n
         resize: 调整图像大小，格式为 (w, h)
         return_numpy: 是否整体转化为 np.array，默认为一个 list，存储每一帧的 np.array
         save_dir: 图像保存文件夹
+        convert_to_rgb: 是否将通道顺序转为 'RGB'，cv2 默认的通道顺序为 'BGR'
 
     """
     if n_frame and n_step:
@@ -50,6 +52,9 @@ def video_to_tensor(video_path, n_frame=None, n_step=None, resize=None, return_n
     if resize:
         frames = [cv2.resize(f, resize) for f in frames]
 
+    if convert_to_rgb:
+        frames = [cv2.cvtColor(f, cv2.COLOR_BGR2RGB) for f in frames]
+
     if return_numpy:
         frames = np.stack(frames)
 
@@ -61,9 +66,21 @@ def video_to_tensor(video_path, n_frame=None, n_step=None, resize=None, return_n
     return frames
 
 
-if __name__ == '__main__':
+def _test():
     """"""
     _video_path = r'../_test_data/v_ApplyEyeMakeup_g01_c01.avi'
     _save_dir = r'../_test_data/-out'
-    _frames = video_to_tensor(_video_path, n_frame=10, resize=(224, 224), return_numpy=True, save_dir=_save_dir)
-    print(_frames.shape)  # (10, 224, 224, 3)
+    _frames = video_to_tensor(_video_path, n_frame=10, resize=(224, 224), return_numpy=False, save_dir=_save_dir)
+    # print(_frames.shape)  # (10, 224, 224, 3)
+
+    import matplotlib.pylab as plt
+
+    x = _frames[0]
+    # x = cv2.cvtColor(x, cv2.COLOR_BGR2RGB)
+    plt.imshow(x)
+    plt.show()
+
+
+if __name__ == '__main__':
+    """"""
+    _test()
