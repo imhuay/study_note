@@ -118,6 +118,10 @@ def _test():
     del b.hello
     print('hello' in b)  # False
 
+    d = {'a': 1, 'b': 2, 'c': {'aa': 11, 'bb': 22}}
+    b = Bunch.from_dict(d)
+    print(b.c.aa)
+
 
 if __name__ == '__main__':
     """"""
