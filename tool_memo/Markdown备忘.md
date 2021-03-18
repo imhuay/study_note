@@ -10,6 +10,7 @@ Index
 - [隐藏代码块](#隐藏代码块)
 - [HTML 表格](#html-表格)
 - [Latex 公式](#latex-公式)
+    - [常用格式](#常用格式)
 
 <!-- /TOC -->
 
@@ -25,7 +26,7 @@ Index
     ```
     <div align="center"><a href=""><img src="../res/公式_20180717114628.png" height="" /></a></div>
     ```
-- `height=""`用于控制图片的大小
+- `height`用于控制图片的大小，一般不使用，图片会等比例缩放；
 
 ## 隐藏代码块
 ```
@@ -51,36 +52,40 @@ Index
 ```
 
 ## Latex 公式
-> 在线 LaTeX 公式编辑器 http://www.codecogs.com/latex/eqneditor.php
 
-**斜体加粗**
+**在 markdown** 内部使用：行内使用 `$` 包围，独立行使用 `$$`
+
+### 常用格式
+> 在线 LaTeX 公式编辑器 http://www.codecogs.com/latex/eqneditor.php
 ```
+-- 斜体加粗
 \boldsymbol{x}
-```
-**期望**
-```
+
+-- 期望
 \mathbb{E}
-```
-**矩阵对齐**
-```
+
+-- 矩阵对齐
 \begin{array}{ll}
  & \\
  & \\
 \end{array}
-```
-**转置**
-```
+
+-- 转置
 ^\mathsf{T}
-```
-**省略号**
-```
+
+-- 省略号
 水平方向    \cdots   
 竖直方向    \vdots   
 对角线方向  \ddots
-```
-**按元素相乘**
-```
+
+-- 按元素相乘
 \circ
 或
 \odot
+
+-- 右箭头
+\rightarrow 
+-- 左箭头
+\leftarrow 
+
 ```
