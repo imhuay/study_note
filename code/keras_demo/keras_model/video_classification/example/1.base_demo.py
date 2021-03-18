@@ -141,7 +141,7 @@ def main():
 
 def _test():
     """"""
-    videl_path = r'/Users/huayang/workspace/my/study_note/code/data_process/_test_data/v_ApplyEyeMakeup_g01_c01.avi'
+    videl_path = r'/code/data_process/modal/_test_data/v_ApplyEyeMakeup_g01_c01.avi'
     t = video_to_tensor(videl_path, n_frame=10)
     print(t.shape)
 
