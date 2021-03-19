@@ -1,4 +1,4 @@
-Hive SQL常用操作
+HiveQL 常用操作
 ===
 
 Index
