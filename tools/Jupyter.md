@@ -1,4 +1,4 @@
-Jupyter备忘
+Jupyter 备忘
 ===
 
 Index

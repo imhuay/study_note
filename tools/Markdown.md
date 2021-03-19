@@ -5,7 +5,8 @@ Index
 ---
 <!-- TOC -->
 
-- [自动更新目录](#自动更新目录)
+- [目录](#目录)
+    - [自动更新插件（VSCode）](#自动更新插件vscode)
 - [图片居中](#图片居中)
 - [隐藏代码块](#隐藏代码块)
 - [HTML 表格](#html-表格)
@@ -14,7 +15,19 @@ Index
 
 <!-- /TOC -->
 
-## 自动更新目录
+## 目录
+```markdown
+<!-- TOC -->
+
+- [A](#A)
+    - [a](#a)
+- [B](#B)
+    - [b](#b)
+    
+<!-- /TOC -->
+```
+
+### 自动更新插件（VSCode）
 - VSCode 插件 [`Markdown TOC`](https://marketplace.visualstudio.com/items?itemName=AlanWalk.markdown-toc)
 
 ## 图片居中
