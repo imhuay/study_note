@@ -13,7 +13,7 @@
 
 </details>
 
-<details><summary><b>踩坑记录</b></summary> 
+<details><summary><b>备忘</b></summary> 
 
 1. 1
 1. 2
