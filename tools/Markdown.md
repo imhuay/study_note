@@ -33,11 +33,11 @@ Index
 ## 图片居中
 - 不带链接
     ```
-    <div align="center"><img src="../res/公式_20180717114628.png" height="" /></div>
+    <div align="center"><img src="./_assets/xxx.png" height="" /></div>
     ```
 - 带链接
     ```
-    <div align="center"><a href=""><img src="../res/公式_20180717114628.png" height="" /></a></div>
+    <div align="center"><a href=""><img src="./_assets/xxx.png" height="" /></a></div>
     ```
 - `height`用于控制图片的大小，一般不使用，图片会等比例缩放；
 
