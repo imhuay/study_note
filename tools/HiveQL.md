@@ -154,48 +154,10 @@ end
 
 ### 加载自定义 UDF
 ```
-add jar viewfs://hadoop-meituan/user/hadoop-aipnlp/user_upload/andrew.lu_nlp_tools-1.0.jar;
--- 字符串归一化（simple）
-CREATE TEMPORARY FUNCTION simpleProcess AS 'com.sankuai.aipnlp.hive.udf.QuerySimpleProcess';
--- 分词
-CREATE TEMPORARY FUNCTION segment AS 'com.sankuai.aipnlp.hive.udf.MTSegment';
-
--- ssh://git@git.sankuai.com/~huayang04/entitylink_tools.git
-add jar viewfs://hadoop-meituan/user/hadoop-aipnlp/user_upload/huayang04_huay_udf.jar;
-add jar viewfs://hadoop-meituan/user/hadoop-aipnlp/user_upload/huayang04_entitylink_udf.jar;
-
 -- 加载 jar 包
-add jar viewfs:///user/hadoop-udf-hub/etl-huayang04_entitylink_udf/huayang04_entitylink_udf-online.jar;
--- 字符串归一化（simple）
-CREATE TEMPORARY FUNCTION simpleNormalize AS 'com.sankuai.aipnlp.hive.udf.SimpleNormalizeUDF';
--- 字符串归一化
-CREATE TEMPORARY FUNCTION textNormalize AS 'com.sankuai.aipnlp.hive.udf.TextNormalizeUDF';
--- 判断子集（Set）
-CREATE TEMPORARY FUNCTION isSubset AS 'com.sankuai.aipnlp.hive.udf.IsSubsetUDF';
--- 判断子集（List）
-CREATE TEMPORARY FUNCTION isSubList AS 'com.sankuai.aipnlp.hive.udf.IsSubListUDF';
--- 判断子串
-CREATE TEMPORARY FUNCTION isSubString AS 'com.sankuai.aipnlp.hive.udf.IsSubStringUDF';
--- 判断子序列
-CREATE TEMPORARY FUNCTION isSubSequence AS 'com.sankuai.aipnlp.hive.udf.IsSubSequenceUDF';
--- 获取交集
-CREATE TEMPORARY FUNCTION getIntersection AS 'com.sankuai.aipnlp.hive.udf.GetIntersectionUDF';
--- 最长重复子串
-CREATE TEMPORARY FUNCTION maxDuplicateSubstring AS 'com.sankuai.aipnlp.hive.udf.MaxDuplicateSubstringUDF';
--- 包含停用词
-CREATE TEMPORARY FUNCTION containStopword AS 'com.sankuai.aipnlp.hive.udf.ContainStopwordUDF';
--- 组合
-CREATE TEMPORARY FUNCTION getCombination AS 'com.sankuai.aipnlp.hive.udf.GetCombinationUDF';
--- 美团分词
-CREATE TEMPORARY FUNCTION mtSegment AS 'com.sankuai.aipnlp.hive.udf.MTSegmentUDF';
--- 字级别 jaccard 相似度
-CREATE TEMPORARY FUNCTION wordJaccardSimilarity AS 'com.sankuai.aipnlp.hive.udf.WordJaccardSimilarityUDF';
--- 判断 sequence 中是否包含 branchname 的字符，且不在 shopname 中
-CREATE TEMPORARY FUNCTION isContainBranchname AS 'com.sankuai.aipnlp.hive.udf.IsContainBranchnameUDF';
--- 滑动窗口 split（'_'分割）
-CREATE TEMPORARY FUNCTION windowSplit AS 'com.sankuai.aipnlp.hive.udf.WindowSplitUDF';
--- java split（支持正则切分，'_'分割）
-CREATE TEMPORARY FUNCTION splitUDF AS 'com.sankuai.aipnlp.hive.udf.SplitUDF';
+add jar viewfs:///path/of/some.jar;
+-- 创建函数
+CREATE TEMPORARY FUNCTION func_name AS 'package.path.of.SomeUDF';
 ```
 
 ### 加载 transform
