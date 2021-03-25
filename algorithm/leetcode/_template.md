@@ -28,9 +28,9 @@
 
 </details>
 
-<details><summary><b>备忘</b></summary> 
+<details><summary><b>代码</b></summary> 
 
-**代码**
+**python**
 ```python
 
 ```

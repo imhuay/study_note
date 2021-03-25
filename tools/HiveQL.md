@@ -136,9 +136,9 @@ LATERAL VIEW EXPLODE(mentionlist) X AS mention
 LATERAL VIEW EXPLODE(array(1,2,3,4)) X AS i
 
 -- presto
-CROSS JOIN UNNEST(arr1) AS tmp_table (a1)  -- unzip
-CROSS JOIN UNNEST(split(label_id, '|')) AS tmp_table (iid)  -- presto 环境下 `|` 不需要转义
-CROSS JOIN UNNEST(arr1, arr2) AS tmp_table (a1, a2)  -- unzip
+CROSS JOIN UNNEST(arr1) AS T (a1)  -- unzip
+CROSS JOIN UNNEST(split(label_id, '|')) AS T (iid)  -- presto 环境下 `|` 不需要转义
+CROSS JOIN UNNEST(arr1, arr2) AS T (a1, a2)  -- unzip
 
 ```
 
