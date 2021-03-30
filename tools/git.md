@@ -39,8 +39,14 @@ git commit -m <'提交信息'>
 
 ### 删除分支
 ```
+# 删除本地分支（需 merge）
+git branch -d [分支名]
+
+# 删除本地分支（不需要 merge）
+git branch -D [分支名]
+
 # 删除远程分支
-git push origin --delete 分支名
+git push origin --delete [分支名]
 ```
 
 ### 推送分支

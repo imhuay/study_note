@@ -21,19 +21,20 @@
 
 </details>
 
+<details><summary><b>代码</b></summary> 
+
+**python**
+- 时间复杂度：`O()`，空间复杂度：`O()`
+```python
+
+```
+
+</details>
+
 <details><summary><b>备忘</b></summary> 
 
 1. 1
 1. 2
-
-</details>
-
-<details><summary><b>代码</b></summary> 
-
-**python**
-```python
-
-```
 
 </details>
 
