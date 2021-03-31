@@ -16,13 +16,44 @@ import requests
 from tqdm import tqdm
 
 
+def get_response(url,
+                 timeout=3,
+                 n_retry_max=5,
+                 return_content=True,
+                 check_func=None, **kwargs):
+    """
+    Args:
+        url:
+        timeout: 超时时间，单位秒
+        n_retry_max: 最大重试次数
+        return_content: 是否返回 response.content
+        check_func: 内容检查函数
+        kwargs: check_func 可能需要的额外参数
+    """
+    n_retry = 0
+    response = None
+    while n_retry < n_retry_max:
+        try:
+            response = requests.get(url=url, timeout=timeout)
+            if return_content:
+                response = response.content
+            if check_func is None or check_func(response, **kwargs):
+                break
+        except:
+            pass
+        finally:
+            n_retry += 1
+
+    return response
+
+
 def download_once(url,
                   save_path=None,
                   save_mode='wb',
                   save_encoding=None,
                   timeout=3,
                   n_retry_max=5,
-                  return_response=False,
+                  return_content=True,
                   check_func=None, **kwargs):
     """
     下载指定 url 内容
@@ -34,30 +65,18 @@ def download_once(url,
         save_encoding: 保存文件编码，save_mode='w' 时，才需要修改
         timeout: 超时时间，单位秒
         n_retry_max: 最大重试次数
-        return_response: 是否返回 response.content
+        return_content: 是否返回 response.content
         check_func: 内容检查函数
         kwargs: check_func 可能需要的额外参数
 
     """
-
-    n_retry = 0
-    response = None
-    while n_retry < n_retry_max:
-        try:
-            response = requests.get(url=url, timeout=timeout).content
-            if check_func is None or check_func(response, **kwargs):
-                break
-        except:
-            pass
-        finally:
-            n_retry += 1
+    response = get_response(url, timeout, n_retry_max, return_content, check_func, **kwargs)
 
     if response and save_path:
         with open(save_path, mode=save_mode, encoding=save_encoding) as f:
             f.write(response)
 
-    if return_response:
-        return response
+    return response
 
 
 def download_multi_thread(save_dir, download_func, arg_ls, n_thread=None, use_iter=True):
