@@ -8,7 +8,7 @@ Author:
     huayang
     
 Subject:
-    一个用于加载配置文件的装饰器，偷师于 facebook 的开源库 hydra
+    一个用于加载配置文件的装饰器，参考自 facebook 的开源库 hydra
 
 Examples:
     ```
