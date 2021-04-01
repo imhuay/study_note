@@ -8,7 +8,7 @@ Author:
     huayang
     
 Subject:
-    利用 python dict 实现简单的 Bunch 模式
+    利用 dict 实现简单的 Bunch 模式
 """
 
 
@@ -53,23 +53,23 @@ class Bunch(dict):
 
     @staticmethod
     def from_dict(d):
-        return bunchize(d)
+        return _bunch(d)
 
     def to_dict(self):
-        return unbunchize(self)
+        return _unbunch(self)
 
 
-def bunchize(x):
+def _bunch(x):
     """ Recursively transforms a dictionary into a Bunch via copy.
 
-        >>> b = bunchize({'urmom': {'sez': {'what': 'what'}}})
+        >>> b = _bunch({'urmom': {'sez': {'what': 'what'}}})
         >>> b.urmom.sez.what
         'what'
 
         bunchify can handle intermediary dicts, lists and tuples (as well as
         their subclasses), but ymmv on custom datatypes.
 
-        >>> b = bunchize({ 'lol': ('cats', {'hah':'i win again'}),
+        >>> b = _bunch({ 'lol': ('cats', {'hah':'i win again'}),
         ...         'hello': [{'french':'salut', 'german':'hallo'}] })
         >>> b.hello[0].french
         'salut'
@@ -79,18 +79,18 @@ def bunchize(x):
         nb. As dicts are not hashable, they cannot be nested in sets/frozensets.
     """
     if isinstance(x, dict):
-        return Bunch((k, bunchize(v)) for k, v in x.items())
+        return Bunch((k, _bunch(v)) for k, v in x.items())
     elif isinstance(x, (list, tuple)):
-        return type(x)(bunchize(v) for v in x)
+        return type(x)(_bunch(v) for v in x)
     else:
         return x
 
 
-def unbunchize(x):
+def _unbunch(x):
     """ Recursively converts a Bunch into a dictionary.
 
         >>> b = Bunch(foo=Bunch(lol=True), hello=42, ponies='are pretty!')
-        >>> unbunchize(b)
+        >>> _unbunch(b)
         {'foo': {'lol': True}, 'hello': 42, 'ponies': 'are pretty!'}
 
         unbunchify will handle intermediary dicts, lists and tuples (as well as
@@ -98,15 +98,15 @@ def unbunchize(x):
 
         >>> b = Bunch(foo=['bar', Bunch(lol=True)], hello=42,
         ...         ponies=('are pretty!', Bunch(lies='are trouble!')))
-        >>> unbunchize(b) #doctest: +NORMALIZE_WHITESPACE
+        >>> _unbunch(b) #doctest: +NORMALIZE_WHITESPACE
         {'foo': ['bar', {'lol': True}], 'hello': 42, 'ponies': ('are pretty!', {'lies': 'are trouble!'})}
 
         nb. As dicts are not hashable, they cannot be nested in sets/frozensets.
     """
     if isinstance(x, dict):
-        return dict((k, unbunchize(v)) for k, v in x.items())
+        return dict((k, _unbunch(v)) for k, v in x.items())
     elif isinstance(x, (list, tuple)):
-        return type(x)(unbunchize(v) for v in x)
+        return type(x)(_unbunch(v) for v in x)
     else:
         return x
 
