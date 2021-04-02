@@ -10,6 +10,14 @@ Author:
 Subject:
     一个用于加载配置文件的装饰器，参考自 facebook 的开源库 hydra 的一种典型使用场景。
 
+    ```
+    import hydra
+
+    @hydra.main(config_name="config.yaml")
+    def main(cfg):
+        ...
+    ```
+
 References:
     facebookresearch/hydra | https://github.com/facebookresearch/hydra
 """
