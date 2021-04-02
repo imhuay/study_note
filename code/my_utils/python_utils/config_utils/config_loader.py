@@ -53,7 +53,7 @@ def _load_config_file(file_path, file_type):
     argv = sys.argv
     if file_path is None:
         if len(argv) < 2:
-            raise ValueError('If use command line, config file path must be given.')
+            raise ValueError('Config file path must be given, at parameter or command line.')
         file_path = sys.argv[1]
 
     if file_type is None:
