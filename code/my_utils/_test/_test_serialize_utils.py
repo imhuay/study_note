@@ -17,7 +17,7 @@ from basic_utils import SerializeUtils
 if __name__ == '__main__':
     """"""
     test_file = r'data/pok.jpg'
-    test_file_cp = r'data/-pok_cp.jpg'
+    test_file_cp = r'data/-out/pok_cp.jpg'
 
     # bytes to str
     b = open(test_file, 'rb').read()
