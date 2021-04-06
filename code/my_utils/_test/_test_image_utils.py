@@ -13,10 +13,11 @@ Subject:
 
 import data_utils as du
 
-
-import data_utils.image_utils as image_utils
-from data_utils.image_utils import Tensorize
+import data_utils
+# import data_utils.image_utils as image_utils
+from data_utils import image_utils
+# from data_utils.image_utils import Tensorize
 
 # ret = image_utils.Tensorize.by_pil(r'data/pok.jpg')
-ret = Tensorize.by_pil(r'data/pok.jpg')
+ret = image_utils.Tensorize.by_pil(r'data/pok.jpg')
 print(ret)

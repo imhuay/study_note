@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 """
 Time:
-    2021-04-02 9:05 下午
+    2021-04-06 7:37 下午
     
 Author:
     huayang
@@ -10,17 +10,10 @@ Author:
 Subject:
     
 """
-import io
 import os
+import io
 
 from PIL import Image
-
-from ._check import Check
-
-from ._tensorize import Tensorize
-from ._tensorize import tensor_to_image
-
-tensor_by_pil = Tensorize.by_pil
 
 
 def get_real_ext(image_path, return_is_same=False):
@@ -96,7 +89,3 @@ def load_image(src, color_mode='RGB') -> Image.Image:
             print('The color mode=%s can not convert to %s' % (img.mode, color_mode))
 
     return img
-
-
-if __name__ == '__main__':
-    """"""

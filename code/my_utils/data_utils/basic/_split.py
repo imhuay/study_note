@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 """
 Time:
-    2021-04-02 7:06 下午
+    2021-04-06 7:41 下午
     
 Author:
     huayang
@@ -42,7 +42,7 @@ def safe_indexing(x, indices=None):
         return [x[idx] for idx in indices]
 
 
-def split(*arrays, split_size=0.25, random_seed=1, shuffle=True):
+def data_split(*arrays, split_size=0.25, random_seed=1, shuffle=True):
     """
     将数据按比例切分
 
@@ -57,10 +57,11 @@ def split(*arrays, split_size=0.25, random_seed=1, shuffle=True):
 
         >>> x = [[i] * 128 for i in range(100)]
         >>> y = list(range(100))
-        >>> (x_t, y_t), (x_v, y_v) = split(x, y)
+        >>> (x_t, y_t), (x_v, y_v) = data_split(x, y)
         >>> (np.asarray(x_t)[:5, 0] == np.asarray(y_t)[:5]).all()
         True
     """
+
     # assert
     lens = [len(x) for x in arrays]
     if len(set(lens)) > 1:

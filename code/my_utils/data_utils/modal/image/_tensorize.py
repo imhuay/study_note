@@ -164,3 +164,6 @@ class Tensorize(object):
         """
         x = plt.imread(img)
         return x
+
+
+image_to_tensor = Tensorize.by_pil

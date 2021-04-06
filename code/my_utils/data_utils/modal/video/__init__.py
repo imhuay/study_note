@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 """
 Time:
-    2021-04-02 9:05 下午
+    2021-03-01 17:10
     
 Author:
     huayang
@@ -11,6 +11,4 @@ Subject:
     
 """
 
-
-class VideoDataUtils:
-    """"""
+from .tensorize import video_to_tensor
