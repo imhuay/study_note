@@ -13,5 +13,5 @@ Subject:
 
 from .time_utils import TimeUtils
 from .system_utils import SystemUtils
-# from .request_utils import
+from .request_utils import RequestUtils
 from .serialize_utils import SerializeUtils

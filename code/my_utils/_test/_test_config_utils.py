@@ -12,7 +12,7 @@ Subject:
 """
 
 import sys
-from config_utils.config_loader import load_config
+from config_utils import load_config
 
 
 @load_config()
@@ -22,7 +22,7 @@ def main1(cfg):
     print(cfg)
 
 
-@load_config('_test/test_config.yaml', file_type='yaml')
+@load_config('test_config.yaml', file_type='yaml')
 def main2(cfg):
     """"""
     print(type(cfg))
@@ -31,10 +31,9 @@ def main2(cfg):
 
 if __name__ == '__main__':
     """"""
-    # sys.argv = ['', 'test_config.yaml']
+    sys.argv = ['', 'test_config.yaml']
+    # print(sys.argv)
 
-    argv = sys.argv
-    print(argv)
     main1()
     """
     <class 'basic_utils.config.bunch.Bunch'>
