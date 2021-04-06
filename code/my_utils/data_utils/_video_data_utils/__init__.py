@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 """
 Time:
-    2021-04-01 8:58 下午
+    2021-04-02 9:05 下午
     
 Author:
     huayang
@@ -11,5 +11,6 @@ Subject:
     
 """
 
-from ._bunch import Bunch
-from ._config_loader import load_config
+
+class VideoDataUtils:
+    """"""
