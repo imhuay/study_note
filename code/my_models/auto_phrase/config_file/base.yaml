@@ -1,0 +1,11 @@
+n_gram:
+  max_n: 4  # n 的最大值（从 uni-gram 到 n-gram）
+  epsilon: 0.00001  # 1e-5
+
+tokenize:
+  to_simplified: True  # 繁转简
+  to_lower: True  # 大写转小写
+  to_half: True  # 全角转半角
+
+train:
+  n_epoch: 5
