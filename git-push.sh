@@ -11,19 +11,22 @@
 pwd=$(pwd)
 
 # 先更新子仓库
-printf "=== Update submodule first ===\n"
-printf "___ Start update bert_by_keras\n"
-cd "$pwd/code/my_models/bert_by_keras" || exit
-git pull origin master
+printf "=== First: update submodule ===\n"
 
-printf "\n=== Submodule status list ===\n"
-git submodule status
-echo
+# 1.
+sub_repo="bert_by_keras"
+echo "____ Start update $sub_repo"
+cd "$pwd/code/my_models/$sub_repo" || exit
+ret=$(git pull origin master)
+if [[ $ret =~ "Already up to date" ]]; then
+  echo "$sub_repo is already up to date."
+else
+  cd "$pwd" || exit
+  git add "$pwd/code/my_models/$sub_repo"
+  git commit -m "update $sub_repo"
+fi
 
 # 更新父仓库
 cd "$pwd" || exit
-printf "\n=== Start father repository ===\n"
+printf "\n=== Final: push father repository ===\n"
 git push
-
-
-
