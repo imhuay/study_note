@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 """
 Time:
-    2021-04-26 7:43 下午
+    2021-04-26 9:05 下午
     
 Author:
     huayang
@@ -11,10 +11,6 @@ Subject:
     
 """
 import os
-
-from .tensorize import load_image
-from .tensorize import image_to_tensor
-from .tensorize import tensor_to_image
 
 
 def get_real_ext(image_path, return_is_same=False):

@@ -93,7 +93,19 @@ def tensor_to_image(x, save_path=None, scale=False):
 
 
 class ImageTensorize(object):
+    """
+    图片张量化，提供了基于 PIL、cv2、tf 的三种方法；三种方法获取的张量在数值上会存在细微差异
 
+    Note:
+        - 基于 base64 的序列化方法可以参考：python_utils/basic_utils/serialize.py
+        - 使用 tf 版本需要 tensorflow >= 2.0，因为用到了 x.numpy()
+        - cv2 读取的图片默认通道顺序为 bgr，这个需要注意：
+            - 如果要把 cv2 读取的图片用其他库处理，则需要先调整为 rgb；反之其他库处理的图片传给 cv2，需要先转回 bgr；
+            - 换言之，尽量使用同一套库，要么都用 cv2 处理，要么都不用；
+
+    References:
+        keras.preprocessing.image
+    """
     @staticmethod
     def by_pil(img, resize=None, color_mode='RGB', dtype=np.uint8):
         """
