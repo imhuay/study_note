@@ -73,7 +73,7 @@ class RequestUtils:
             kwargs: check_func 可能需要的额外参数
 
         """
-        response = get_response(url, timeout, n_retry_max, return_content, check_func, **kwargs)
+        response = RequestUtils.get_response(url, timeout, n_retry_max, return_content, check_func, **kwargs)
 
         if response and save_path:
             with open(save_path, mode=save_mode, encoding=save_encoding) as f:
