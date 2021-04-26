@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 """
 Time:
-    2021-04-06 7:34 下午
+    2021-04-26 7:56 下午
     
 Author:
     huayang
@@ -10,6 +10,3 @@ Author:
 Subject:
     
 """
-
-from ._split import safe_indexing
-from ._split import data_split
