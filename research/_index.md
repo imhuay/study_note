@@ -8,22 +8,37 @@ Index
 
 - [机器学习、深度学习](#机器学习深度学习)
     - [优化算法](#优化算法)
+        - [Adam](#adam)
+        - [AdamW](#adamw)
     - [度量学习](#度量学习)
 - [数据挖掘](#数据挖掘)
 - [NLP](#nlp)
     - [开源库](#开源库)
     - [Transformer 系列模型](#transformer-系列模型)
+    - [BERT 相关](#bert-相关)
         - [BERT 及其变种](#bert-及其变种)
-        - [BERT 实践](#bert-实践)
-    - [关键词挖掘](#关键词挖掘)
+            - [RoBERTa](#roberta)
+            - [StructBERT](#structbert)
+        - [BERT 应用](#bert-应用)
+            - [BERT for 关键词抽取](#bert-for-关键词抽取)
+                - [KeyBERT](#keybert)
+            - [BERT for NER](#bert-for-ner)
+            - [BERT for 小样本学习](#bert-for-小样本学习)
+            - [BERT for 实体链接](#bert-for-实体链接)
+                - [KnowBert](#knowbert)
+    - [关键词抽取](#关键词抽取)
+        - [综述 for 关键词抽取](#综述-for-关键词抽取)
+        - [开源实现](#开源实现)
     - [小样本学习（NLP）](#小样本学习nlp)
         - [数据增强（扩充）](#数据增强扩充)
         - [数据增强（融合）](#数据增强融合)
-    - [TODO](#todo)
+    - [实体链接](#实体链接)
+        - [综述 for 实体链接](#综述-for-实体链接)
 - [开源库](#开源库-1)
     - [TensorFlow](#tensorflow)
-    - [Keras](#keras)
+        - [Keras](#keras)
     - [PyTorch](#pytorch)
+    - [MatrixSlow](#matrixslow)
 
 <!-- /TOC -->
 
@@ -33,10 +48,12 @@ Index
 ### 优化算法
 > 优化器、optimizer
 
-- Adam
-- AdamW、权重衰减
-    - 【论文】 [Decoupled Weight Decay Regularization](https://arxiv.org/abs/1711.05101)
-    - [比较 Adam 和 AdamW - TFknight](https://www.cnblogs.com/tfknight/p/13425532.html)
+#### Adam
+#### AdamW
+> 权重衰减
+- 【2019】[Decoupled Weight Decay Regularization](https://arxiv.org/abs/1711.05101)
+- 【解读】[比较 Adam 和 AdamW - TFknight](https://www.cnblogs.com/tfknight/p/13425532.html)
+- 
 
 
 ### 度量学习
@@ -57,6 +74,9 @@ Index
 - Transformer
     - 代码
         - 【pytorch】[The Annotated Transformer](http://nlp.seas.harvard.edu/2018/04/03/attention.html)
+- [BERT 及其变种](#bert-及其变种)
+
+### BERT 相关
 #### BERT 及其变种
 - BERT
     - 【官方源码、tf1】[google-research/bert](https://github.com/google-research/bert)
@@ -64,21 +84,52 @@ Index
     - 【pytorch】[huggingface/transformers/bert](https://github.com/huggingface/transformers/blob/master/src/transformers/models/bert/modeling_bert.py)
     - 【tf2】[huggingface/transformers/bert](https://github.com/huggingface/transformers/blob/master/src/transformers/models/bert/modeling_tf_bert.py)
 
-- RoBERTa
+##### RoBERTa
     - 【论文】
     - 【解读】[RoBERTa 详解 - 知乎](https://zhuanlan.zhihu.com/p/103205929)
     
-- StructBERT
+##### StructBERT
     - 【论文】[StructBERT: Incorporating Language Structures into Pre-training for Deep Language Understanding](https://arxiv.org/abs/1908.04577)
     - 【解读】[StructBERT解读_fengzhou-CSDN博客](https://blog.csdn.net/fengzhou_/article/details/107028168)
 
-#### BERT 实践
-- 【BERT for NER】[基于BERT预训练的中文命名实体识别TensorFlow实现_macanv的专栏-CSDN博客_bert中文命名实体识别](https://blog.csdn.net/macanv/article/details/85684284)
-- 【BERT for 小样本学习】[必须要GPT3吗？不，BERT的MLM模型也能小样本学习 - 科学空间|Scientific Spaces](https://spaces.ac.cn/archives/7764)
+
+#### BERT 应用
+##### BERT for 关键词抽取
+> 利用 BERT 进行关键词抽取
+
+- 【Github】[ibatra/BERT-Keyword-Extractor](https://github.com/ibatra/BERT-Keyword-Extractor)
+
+###### KeyBERT
+- 【Github】[MaartenGr/KeyBERT](https://github.com/MaartenGr/KeyBERT)
 
 
-### 关键词挖掘
+##### BERT for NER
+- [基于BERT预训练的中文命名实体识别TensorFlow实现_macanv的专栏-CSDN博客_bert中文命名实体识别](https://blog.csdn.net/macanv/article/details/85684284)
+
+##### BERT for 小样本学习
+- [必须要GPT3吗？不，BERT的MLM模型也能小样本学习 - 科学空间|Scientific Spaces](https://spaces.ac.cn/archives/7764)
+
+##### BERT for 实体链接
+###### KnowBert
+> 利用知识库增强上下文词表示、实体消歧、实体链接；
+- 【论文】[[1909.04164] Knowledge Enhanced Contextual Word Representations](https://arxiv.org/abs/1909.04164)
+
+
+### 关键词抽取
+> Keyword Extraction、关键词挖掘
+
+- [BERT for 关键词抽取](#bert-for-关键词抽取)
+
+#### 综述 for 关键词抽取
 - [NLP关键词提取方法总结及实现-CSDN博客](https://blog.csdn.net/asialee_bird/article/details/96454544)
+    > TfIdf、TextRank、LDA主题模型等；
+- [「关键词」提取都有哪些方案？ - 知乎](https://www.zhihu.com/question/21104071)
+
+
+#### 开源实现
+- 【Github】[LIAAD/yake](https://github.com/LIAAD/yake)
+    > 单文档无监督关键词抽取，不支持中文
+- 【Github】[aneesha/RAKE](https://github.com/aneesha/RAKE)
 
 
 ### 小样本学习（NLP）
@@ -89,8 +140,13 @@ Index
 #### 数据增强（融合）
 
 
-### TODO
-- 文本蕴含
+### 实体链接
+- [BERT for 实体链接](#bert-for-实体链接)
+
+#### 综述 for 实体链接
+- 【博客】[实体链接（一） - Pelhans 的博客](http://pelhans.com/2019/08/16/kg_paper-note3/)
+- 【2015】Entity Linking with a Knowledge Base:Issues, Techniques, and Solutions
+- 【2020】Neural Entity Linking: A Survey of ModelsBased on Deep Learning
 
 
 ## 开源库
@@ -99,9 +155,16 @@ Index
 - 【官方文档】[TensorFlow Tutorials](https://www.tensorflow.org/tutorials)
 
 
-### Keras
+#### Keras
 - 【官方文档】[Keras API reference](https://keras.io/api/)
 
 
 ### PyTorch
 - 【官方文档】[PyTorch Tutorials](https://pytorch.org/tutorials/beginner/basics/intro.html)
+
+- 【拓展库】[huggingface/accelerate](https://github.com/huggingface/accelerate)
+    > 提供一个简单的 API，将与多GPU、TPU、FP16相关的样板代码抽离出来，保持其余代码不变。用户无须使用不便控制和调整的抽象类或编写、维护样板代码，就可以直接上手多GPU或TPU。
+
+### MatrixSlow
+> 《用 python 实现深度学习框架》配套代码
+- [zackchen/MatrixSlow: A simple deep learning framework in pure python for purpose of learning in DL](https://github.com/zackchen/MatrixSlow)
