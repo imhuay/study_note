@@ -11,7 +11,7 @@
 pwd=$(pwd)
 
 # 先更新子仓库
-printf "=== First: update submodule ===\n"
+printf "=== First: Update submodule ===\n"
 
 # 1.
 sub_repo="bert_by_keras"
@@ -23,10 +23,10 @@ if [[ $ret =~ "Already up to date" ]]; then
 else
   cd "$pwd" || exit
   git add "$pwd/code/my_models/$sub_repo"
-  git commit -m "update $sub_repo"
+  git commit -m "U $sub_repo"
 fi
 
 # 更新父仓库
 cd "$pwd" || exit
-printf "\n=== Final: push father repository ===\n"
+printf "\n=== Final: Push father repository ===\n"
 git push
