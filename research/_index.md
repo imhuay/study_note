@@ -14,6 +14,7 @@ Index
 - [数据挖掘](#数据挖掘)
 - [NLP](#nlp)
     - [开源库](#开源库)
+    - [Self-Attention](#self-attention)
     - [Transformer 系列模型](#transformer-系列模型)
     - [BERT 相关](#bert-相关)
         - [BERT 及其变种](#bert-及其变种)
@@ -34,6 +35,7 @@ Index
         - [数据增强（融合）](#数据增强融合)
     - [实体链接](#实体链接)
         - [综述 for 实体链接](#综述-for-实体链接)
+    - [纠错](#纠错)
 - [开源库](#开源库-1)
     - [TensorFlow](#tensorflow)
         - [Keras](#keras)
@@ -69,6 +71,9 @@ Index
 
 ### 开源库
 - [huggingface/transformers](https://github.com/huggingface/transformers)
+
+### Self-Attention
+- [从三大顶会论文看百变Self-Attention - 知乎](https://zhuanlan.zhihu.com/p/92335822)
 
 ### Transformer 系列模型
 - Transformer
@@ -149,6 +154,15 @@ Index
 - 【2020】Neural Entity Linking: A Survey of ModelsBased on Deep Learning
 
 
+### 纠错
+
+**相关文章**
+- [Soft-Masked BERT：文本纠错与BERT的最新结合 - 知乎](https://zhuanlan.zhihu.com/p/144995580)
+
+**开源实现**
+- [shibing624/pycorrector: pycorrector is a toolkit for text error correction. 文本纠错，Kenlm，Seq2Seq_Attention，BERT，MacBERT，ELECTRA，ERNIE，Transformer等模型实现，开箱即用。](https://github.com/shibing624/pycorrector)
+
+
 ## 开源库
 
 ### TensorFlow
@@ -164,6 +178,10 @@ Index
 
 - 【拓展库】[huggingface/accelerate](https://github.com/huggingface/accelerate)
     > 提供一个简单的 API，将与多GPU、TPU、FP16相关的样板代码抽离出来，保持其余代码不变。用户无须使用不便控制和调整的抽象类或编写、维护样板代码，就可以直接上手多GPU或TPU。
+
+- 【高级API】[fastai/fastai: The fastai deep learning library](https://github.com/fastai/fastai)
+
+- 【高级API】[fastnlp/fastNLP: fastNLP: A Modularized and Extensible NLP Framework. Currently still in incubation.](https://github.com/fastnlp/fastNLP)
 
 ### MatrixSlow
 > 《用 python 实现深度学习框架》配套代码
