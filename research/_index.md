@@ -16,7 +16,7 @@ Index
 - [NLP](#nlp)
     - [开源库](#开源库)
     - [Self-Attention](#self-attention)
-    - [Transformer 系列模型](#transformer-系列模型)
+    - [Transformer 相关](#transformer-相关)
         - [UniLM](#unilm)
         - [MiniLM](#minilm)
     - [BERT 相关](#bert-相关)
@@ -80,8 +80,13 @@ Index
 ### Self-Attention
 - [从三大顶会论文看百变Self-Attention - 知乎](https://zhuanlan.zhihu.com/p/92335822)
 
-### Transformer 系列模型
+### Transformer 相关
 - Transformer
+    - 论文
+        - 【】
+            > 原论文
+        - 【2020】[On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745)
+            > 研究 Layer Normalization 在 Transformer 中的作用，比较了 PerLN 和 PostLN
     - 代码
         - 【pytorch】[The Annotated Transformer](http://nlp.seas.harvard.edu/2018/04/03/attention.html)
 - [BERT 及其变种](#bert-及其变种)
