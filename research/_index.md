@@ -11,12 +11,14 @@ Index
         - [Adam](#adam)
         - [AdamW](#adamw)
     - [度量学习](#度量学习)
+    - [模型蒸馏](#模型蒸馏)
 - [数据挖掘](#数据挖掘)
 - [NLP](#nlp)
     - [开源库](#开源库)
     - [Self-Attention](#self-attention)
     - [Transformer 系列模型](#transformer-系列模型)
         - [UniLM](#unilm)
+        - [MiniLM](#minilm)
     - [BERT 相关](#bert-相关)
         - [BERT 及其变种](#bert-及其变种)
             - [RoBERTa](#roberta)
@@ -64,6 +66,9 @@ Index
 - 【开源库】[pytorch for metric learning](https://github.com/KevinMusgrave/pytorch-metric-learning)
 
 
+### 模型蒸馏
+
+
 ## 数据挖掘
 
 
@@ -83,7 +88,14 @@ Index
 
 #### UniLM
 - 【Github】[microsoft/unilm: UniLM - Unified Language Model Pre-training / Pre-training for NLP and Beyond](https://github.com/microsoft/unilm)
-- 【解读】[UniLM论文阅读笔记 - 知乎](https://zhuanlan.zhihu.com/p/113380840)
+- 【2020】[UniLMv2: Pseudo-Masked Language Models for Unified Language Model Pre-Training](https://arxiv.org/abs/2002.12804)
+- 【2019】[Unified Language Model Pre-training for Natural Language Understanding and Generation](https://arxiv.org/abs/1905.03197)
+    - 【解读】[UniLM论文阅读笔记 - 知乎](https://zhuanlan.zhihu.com/p/113380840)
+- 【中文】[开源啦！开源啦！UNILM中文模型开源啦！ - 知乎](https://zhuanlan.zhihu.com/p/163483660)
+    - 【Github】[YunwenTechnology/Unilm](https://github.com/YunwenTechnology/Unilm)
+
+#### MiniLM
+- 【2020】[[2002.10957] MiniLM: Deep Self-Attention Distillation for Task-Agnostic Compression of Pre-Trained Transformers](https://arxiv.org/abs/2002.10957)
 
 ### BERT 相关
 #### BERT 及其变种
