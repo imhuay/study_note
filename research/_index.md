@@ -6,21 +6,22 @@ Index
 ---
 <!-- TOC -->
 
-- [机器学习、深度学习](#机器学习深度学习)
+- [深度学习](#深度学习)
     - [优化算法](#优化算法)
         - [Adam](#adam)
         - [AdamW](#adamw)
     - [度量学习](#度量学习)
+    - [远程监督](#远程监督)
     - [模型蒸馏](#模型蒸馏)
 - [数据挖掘](#数据挖掘)
-- [NLP](#nlp)
+- [NLP 模型](#nlp-模型)
     - [开源库](#开源库)
     - [Self-Attention](#self-attention)
     - [Transformer 相关](#transformer-相关)
         - [UniLM](#unilm)
         - [MiniLM](#minilm)
     - [BERT 相关](#bert-相关)
-        - [BERT 及其变种](#bert-及其变种)
+        - [BERT 及其衍生](#bert-及其衍生)
             - [RoBERTa](#roberta)
             - [StructBERT](#structbert)
         - [BERT 应用](#bert-应用)
@@ -30,6 +31,9 @@ Index
             - [BERT for 小样本学习](#bert-for-小样本学习)
             - [BERT for 实体链接](#bert-for-实体链接)
                 - [KnowBert](#knowbert)
+- [NLP 研究方向](#nlp-研究方向)
+    - [细粒度情感分析](#细粒度情感分析)
+    - [对话](#对话)
     - [关键词抽取](#关键词抽取)
         - [综述 for 关键词抽取](#综述-for-关键词抽取)
     - [小样本学习（NLP）](#小样本学习nlp)
@@ -47,7 +51,7 @@ Index
 <!-- /TOC -->
 
 
-## 机器学习、深度学习
+## 深度学习
 
 ### 优化算法
 > 优化器、optimizer
@@ -66,13 +70,21 @@ Index
 - 【开源库】[pytorch for metric learning](https://github.com/KevinMusgrave/pytorch-metric-learning)
 
 
+### 远程监督
+**应用**
+- 自动序列标注
+- 意见实体抽取（Aspect Extraction）
+- 命名实体识别（Named Entity Recognition，NER）
+- 关系抽取（Relation Extraction）
+
+
 ### 模型蒸馏
 
 
 ## 数据挖掘
 
 
-## NLP
+## NLP 模型
 
 ### 开源库
 - [huggingface/transformers](https://github.com/huggingface/transformers)
@@ -81,15 +93,8 @@ Index
 - [从三大顶会论文看百变Self-Attention - 知乎](https://zhuanlan.zhihu.com/p/92335822)
 
 ### Transformer 相关
-- Transformer
-    - 论文
-        - 【】
-            > 原论文
-        - 【2020】[On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745)
-            > 研究 Layer Normalization 在 Transformer 中的作用，比较了 PerLN 和 PostLN
-    - 代码
-        - 【pytorch】[The Annotated Transformer](http://nlp.seas.harvard.edu/2018/04/03/attention.html)
-- [BERT 及其变种](#bert-及其变种)
+> [Transformer 专题](./Transformer/README.md)
+- [BERT 及其变种](#bert-及其衍生)
 
 #### UniLM
 - 【Github】[microsoft/unilm: UniLM - Unified Language Model Pre-training / Pre-training for NLP and Beyond](https://github.com/microsoft/unilm)
@@ -104,7 +109,7 @@ Index
 
 
 ### BERT 相关
-#### BERT 及其变种
+#### BERT 及其衍生
 - BERT
     - 【官方源码、tf1】[google-research/bert](https://github.com/google-research/bert)
     - 【pytorch】 [codertimo/BERT-pytorch](https://github.com/codertimo/BERT-pytorch)
@@ -112,12 +117,13 @@ Index
     - 【tf2】[huggingface/transformers/bert](https://github.com/huggingface/transformers/blob/master/src/transformers/models/bert/modeling_tf_bert.py)
 
 ##### RoBERTa
-    - 【论文】
-    - 【解读】[RoBERTa 详解 - 知乎](https://zhuanlan.zhihu.com/p/103205929)
+- 【论文】
+- 【解读】[RoBERTa 详解 - 知乎](https://zhuanlan.zhihu.com/p/103205929)
+
     
 ##### StructBERT
-    - 【论文】[StructBERT: Incorporating Language Structures into Pre-training for Deep Language Understanding](https://arxiv.org/abs/1908.04577)
-    - 【解读】[StructBERT解读_fengzhou-CSDN博客](https://blog.csdn.net/fengzhou_/article/details/107028168)
+- 【论文】[StructBERT: Incorporating Language Structures into Pre-training for Deep Language Understanding](https://arxiv.org/abs/1908.04577)
+- 【解读】[StructBERT解读_fengzhou-CSDN博客](https://blog.csdn.net/fengzhou_/article/details/107028168)
 
 
 #### BERT 应用
@@ -140,6 +146,20 @@ Index
 ###### KnowBert
 > 利用知识库增强上下文词表示、实体消歧、实体链接；
 - 【论文】[[1909.04164] Knowledge Enhanced Contextual Word Representations](https://arxiv.org/abs/1909.04164)
+
+
+## NLP 研究方向
+
+### 细粒度情感分析
+> Aspect Based Sentiment Analysis, ABSA <br/>
+> [ABSA 专题](./ABSA/README.md)
+
+### 对话
+> QA
+
+**综述**
+- 【2021】[Recent Advances in Deep Learning-based Dialogue Systems](https://arxiv.org/abs/2105.04387)
+
 
 
 ### 关键词抽取
