@@ -44,9 +44,9 @@ Index
 
 <div align="center"><img src="./_assets/Inward-Outward_LSTM_for_TOWE.png" height="300" /></div>
 
-- 【Github】[NJUNLP/TOWE: Code and data for "Target-oriented Opinion Words Extraction with Target-fused Neural Sequence Labeling" (NAACL2019)](https://github.com/NJUNLP/TOWE)
+- 【Github, PyTorch】[NJUNLP/TOWE: Code and data for "Target-oriented Opinion Words Extraction with Target-fused Neural Sequence Labeling" (NAACL2019)](https://github.com/NJUNLP/TOWE)
 
 ## 参考文献
 $[1]$ 【2021】[A Joint Training Dual-MRC Framework for Aspect Based Sentiment Analysis](https://arxiv.org/abs/2101.00816) <br/>
 $[2]$ 【2019】[细粒度情感分析（ABSA），一个从零开始的案例教程【Python实现】_HapHapYear的博客 - CSDN博客](https://blog.csdn.net/HapHapYear/article/details/101102870) <br/>
-$[3]$ 【2019、NAACL】[Target-oriented Opinion Words Extraction with Target-fused Neural Sequence Labeling](https://www.aclweb.org/anthology/N19-1259/) <br/>
+$[3]$ 【2019, NAACL】[Target-oriented Opinion Words Extraction with Target-fused Neural Sequence Labeling](https://www.aclweb.org/anthology/N19-1259/) <br/>
