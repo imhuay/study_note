@@ -77,9 +77,10 @@ Index
 **在 markdown** 内部使用：行内使用 `$` 包围，独立行使用 `$$`
 
 ### 参考文献
-```
 $[1]$ [xxx](xxx) <br/>
-```
+
+引用$^{[1]}$
+
 
 ### 常用格式
 > 在线 LaTeX 公式编辑器 http://www.codecogs.com/latex/eqneditor.php
