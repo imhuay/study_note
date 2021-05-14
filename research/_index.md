@@ -6,13 +6,15 @@ Index
 ---
 <!-- TOC -->
 
+- [机器学习](#机器学习)
+    - [主动学习](#主动学习)
+    - [度量学习](#度量学习)
+    - [远程监督](#远程监督)
+    - [模型蒸馏](#模型蒸馏)
 - [深度学习](#深度学习)
     - [优化算法](#优化算法)
         - [Adam](#adam)
         - [AdamW](#adamw)
-    - [度量学习](#度量学习)
-    - [远程监督](#远程监督)
-    - [模型蒸馏](#模型蒸馏)
 - [数据挖掘](#数据挖掘)
 - [NLP 模型](#nlp-模型)
     - [开源库](#开源库)
@@ -50,19 +52,11 @@ Index
 
 <!-- /TOC -->
 
+## 机器学习
 
-## 深度学习
-
-### 优化算法
-> 优化器、optimizer
-
-#### Adam
-#### AdamW
-> 权重衰减
-- 【2019】[Decoupled Weight Decay Regularization](https://arxiv.org/abs/1711.05101)
-- 【解读】[比较 Adam 和 AdamW - TFknight](https://www.cnblogs.com/tfknight/p/13425532.html)
-- 
-
+### 主动学习
+> Active Learning
+- [主动学习(Active Learning)_猪逻辑公园-CSDN博客](https://blog.csdn.net/qq_15111861/article/details/85264109)
 
 ### 度量学习
 > Metric Learning、距离度量学习 (Distance Metric Learning，DML) 、相似度学习
@@ -79,6 +73,18 @@ Index
 
 
 ### 模型蒸馏
+
+
+## 深度学习
+
+### 优化算法
+> 优化器、optimizer
+
+#### Adam
+#### AdamW
+> 权重衰减
+- 【2019】[Decoupled Weight Decay Regularization](https://arxiv.org/abs/1711.05101)
+- 【解读】[比较 Adam 和 AdamW - TFknight](https://www.cnblogs.com/tfknight/p/13425532.html)
 
 
 ## 数据挖掘
