@@ -22,10 +22,10 @@ Index
 
 > 其中 "ambience/service" 为 Aspect Terms（AT），"nice/not so great" 为 Opinion Terms（OT）
 
-- Aspect/Target Term Extraction (AE, ATE)、Opinion Target Extraction
+- Aspect/Target Extraction、Opinion Target Extraction
     > 情感对象提取
-- Opinion Term Extraction (OE, OTE)、Opinion Words Extraction
-    > 意见/评价/情感词提取
+- Opinion Extraction/Summarization
+    > [意见/评价/观点/情感]提取/摘要
 - Aspect Sentiment Classification
     > 情感分类（极性分类）
 - Aspect-oriented Opinion Terms Extraction (AOE)
