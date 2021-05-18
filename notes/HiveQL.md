@@ -54,10 +54,16 @@ regexp_extract(mention, '(.*?)-(.*?)', 2)  -- 抽取第二组
 
 ### 常用参数
 ```sql
+-- hive 引擎
 SET mapred.reduce.tasks=64;
 SET mapred.max.split.size=1024000;          -- 决定每个map处理的最大的文档大小，单位为B，越小 map 越多
 SET mapred.min.split.size.per.node=512000;  -- 节点中可以处理的最小的文档大小（可以考虑设置为 max 的一半）
 SET mapred.min.split.size.per.rack=512000;  -- 机架中可以处理的最小的文档大小（与 node 相同）
+SET mapreduce.map.memory.mb=8192;
+SET mapreduce.reduce.memory.mb=8192;
+
+-- spark 引擎
+SET spark.executor.memory=10G;
 ```
 
 
