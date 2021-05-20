@@ -7,7 +7,8 @@ Index
 
 - [Transformer](#transformer)
     - [Transformer 改进](#transformer-改进)
-- [BERT 专题](#bert-专题)
+- [BERT 相关](#bert-相关)
+    - [SentenceBERT](#sentencebert)
 
 <!-- /TOC -->
 
@@ -35,4 +36,9 @@ Index
         > 这里使用的是 PerLN，官方实现为 PostLN
 
 
-## BERT 专题
+## BERT 相关
+
+### SentenceBERT
+> 【2019】[Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks](https://arxiv.org/abs/1908.10084)
+>> 句向量、孪生网络；语义相似度计算、聚类
+
