@@ -8,6 +8,8 @@ Index
 - [Transformer](#transformer)
     - [Transformer 改进](#transformer-改进)
 - [BERT 相关](#bert-相关)
+    - [RoBERTa](#roberta)
+        - [中文 RoBERTa](#中文-roberta)
     - [SentenceBERT](#sentencebert)
 
 <!-- /TOC -->
@@ -37,6 +39,25 @@ Index
 
 
 ## BERT 相关
+
+### RoBERTa
+> 【2019】[RoBERTa: A Robustly Optimized BERT Pretraining Approach](https://arxiv.org/abs/1907.11692)
+
+**模型小结**
+> [RoBERTa 详解 - 知乎](https://zhuanlan.zhihu.com/p/103205929)
+- 模型结构与 BERT 相同；
+- 动态 mask：每次将训练数据喂给模型时，才进行随机mask；
+    > 静态 mask：将一个样本复制 `dupe_factor` 次，每次 mask 不同的 token；且不同的 mask 会输入不同的 epoch；
+    >> 例：`dupe_factor=10`，`epoch=40`，则每种 mask 的方式在训练中会被使用4次。
+- 以 Doc-Sentences 的方式构建语料，并移除 Next Sentence Prediction loss；
+    > Doc-Sentences: 使用来自一篇 doc 中的连续句子作为单个样本，token 数量不超过 512；
+    >> 论文比较了 4 种语料构建方式：1）Segment-Pair；2）Sentence-Pair；3）Full-Sentences；4）Doc-Sentences，详见原文；
+- 更多训练数据、更大 batch size、更长训练时间；
+
+#### 中文 RoBERTa
+> [RoBERTa 中文预训练模型: RoBERTa for Chinese](https://github.com/brightmart/roberta_zh)
+>> 没有实现动态 mask，而是通过增大样本复制数量（`dupe_factor`参数）达到类似的效果；
+
 
 ### SentenceBERT
 > 【2019】[Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks](https://arxiv.org/abs/1908.10084)
