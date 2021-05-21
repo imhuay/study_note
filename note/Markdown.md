@@ -12,8 +12,7 @@ Index
 - [隐藏块](#隐藏块)
 - [HTML 表格](#html-表格)
 - [Latex 公式](#latex-公式)
-    - [参考文献](#参考文献)
-    - [常用格式](#常用格式)
+    - [Latex for Markdown](#latex-for-markdown)
 
 <!-- /TOC -->
 
@@ -38,6 +37,12 @@ Index
 - VSCode 插件 [`Markdown TOC`](https://marketplace.visualstudio.com/items?itemName=AlanWalk.markdown-toc)
 
 ## 图片居中
+
+<style> 
+.test{width:300px; align:"center"; overflow:hidden} 
+.test img{max-width:300px;_width:expression(this.width > 300 ? "300px" : this.width);} 
+</style> 
+
 - 不带链接
     ```
     <div align="center"><img src="./_assets/xxx.png" height="300" /></div>
@@ -73,17 +78,21 @@ Index
 ```
 
 ## Latex 公式
+> [【LaTeX】LaTeX符号大全_Ljnoit-CSDN博客_latex 绝对值符号](https://blog.csdn.net/ljnoit/article/details/104264753)
 
-**在 markdown** 内部使用：行内使用 `$` 包围，独立行使用 `$$`
-
-### 参考文献
-$[1]$ [xxx](xxx) <br/>
-
-引用$^{[1]}$
-
-
-### 常用格式
 > 在线 LaTeX 公式编辑器 http://www.codecogs.com/latex/eqneditor.php
+
+**绝对值**
+
+$$ \left | a-b \right |
+$$
+
+**函数名**
+- 如果是预定义好的，直接 `\max(x)`，否则使用 `\operatorname{f}(x)`，示例：
+
+$$ \operatorname{f}(x)
+$$
+
 ```
 -- 斜体加粗
 \boldsymbol{x}
@@ -116,3 +125,13 @@ $[1]$ [xxx](xxx) <br/>
 \leftarrow 
 
 ```
+
+### Latex for Markdown
+> markdown 专用
+- 在 markdown 内使用：行内使用 `$` 包围，独立行使用 `$$` 包围
+
+**参考和引用**
+
+$[1]$ [xxx](xxx) <br/>
+
+引用$^{[1]}$
