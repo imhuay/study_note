@@ -1,4 +1,4 @@
-损失函数
+损失函数（Loss Function）
 ===
 
 Index
