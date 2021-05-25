@@ -1,4 +1,4 @@
-优化器（optimizer）
+优化器（Optimizer）
 ===
 
 Index

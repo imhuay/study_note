@@ -8,6 +8,7 @@ Index
 - [Transformer](#transformer)
     - [Transformer 改进](#transformer-改进)
 - [BERT 相关](#bert-相关)
+    - [BERT](#bert)
     - [RoBERTa](#roberta)
         - [中文 RoBERTa](#中文-roberta)
     - [SentenceBERT](#sentencebert)
@@ -40,18 +41,24 @@ Index
 
 ## BERT 相关
 
+### BERT
+> 【2018、Google】[BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805)
+
+
 ### RoBERTa
-> 【2019】[RoBERTa: A Robustly Optimized BERT Pretraining Approach](https://arxiv.org/abs/1907.11692)
+> 【2019、Facebook】[RoBERTa: A Robustly Optimized BERT Pretraining Approach](https://arxiv.org/abs/1907.11692)
+>> 更好地训练 BERT 模型
 
 **模型小结**
 > [RoBERTa 详解 - 知乎](https://zhuanlan.zhihu.com/p/103205929)
-- 模型结构与 BERT 相同；
+- 模型结构与 BERT 相同（参数可以互用）；
 - 动态 mask：每次将训练数据喂给模型时，才进行随机mask；
     > 静态 mask：将一个样本复制 `dupe_factor` 次，每次 mask 不同的 token；且不同的 mask 会输入不同的 epoch；
     >> 例：`dupe_factor=10`，`epoch=40`，则每种 mask 的方式在训练中会被使用4次。
 - 以 Doc-Sentences 的方式构建语料，并移除 Next Sentence Prediction loss；
-    > Doc-Sentences: 使用来自一篇 doc 中的连续句子作为单个样本，token 数量不超过 512；
+    > Doc-Sentences: 使用来自同一篇 doc 中的连续句子作为单个样本，总 token 数不超过 512；因为移除了 NSP 任务，所以也不需要以 pair 的方式输入语料；
     >> 论文比较了 4 种语料构建方式：1）Segment-Pair；2）Sentence-Pair；3）Full-Sentences；4）Doc-Sentences，详见原文；
+- 优化器超参数调整；
 - 更多训练数据、更大 batch size、更长训练时间；
 
 #### 中文 RoBERTa
@@ -62,4 +69,31 @@ Index
 ### SentenceBERT
 > 【2019】[Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks](https://arxiv.org/abs/1908.10084)
 >> 句向量、孪生网络；语义相似度计算、聚类
+
+**模型小结**
+- 通过在 BERT 后添加 Pooling 层来产生固定维度的句向量； 
+    > shape: `(?, 768, 512) -> (?, 512)`，详见 [sentence-transformers/Pooling.py](https://github.com/UKPLab/sentence-transformers/blob/master/sentence_transformers/models/Pooling.py)
+    - 具体使用了三种 Pooling 方式：
+        1. 直接使用 CLS 向量（the output of the CLS-token）；
+        1. 所有 token embedding 的均值（不包含 CLS embedding，默认）；
+        1. 所有 token embedding 的最大值（不包含 CLS embedding）
+            > `torch.max(token_embeddings, dim=1)`，`dim=0` 为 batch 维
+- 使用**孪生网络**和**自然语言推理**（NLI）数据来训练模型；
+    - 具体使用的数据集为 SNLI 和 MultiNLI；
+- 通过三种目标函数来 fine tune 模型，具体根据评估的数据集来确定；
+    1. 分类任务，使用交叉熵 loss；
+    1. 回归任务，计算两个句向量的 cosine 相似度，使用均方差 loss；
+    1. Triplet Loss：输入是一个三元组 `(a, p, n)`，目标是拉近 `a, p` 的距离，拉远 `a, n` 的距离；
+        > 详见 [Triplet loss](../../wiki/loss_function.md#Triplet-Loss)
+
+**训练细节**
+- 数据量：570,000 + 430,000 pairs
+    > SNLI: 570,000、MultiNLI: 430,000
+- 3-way softmax 分类；
+- batch-size 16, epoch 1；
+- Adam with lr=2e−5, a linear learning rate warm-up over 10% of the training data；
+
+**应用**
+> 
+
 
