@@ -31,7 +31,7 @@ def main2(cfg):
 
 if __name__ == '__main__':
     """"""
-    sys.argv = ['', 'test_config.yaml']
+    sys.argv = ['', 'test_config.json']
     # print(sys.argv)
 
     main1()
