@@ -8,8 +8,7 @@ Author:
     huayang
     
 Subject:
-    一个用于加载配置文件的装饰器，参考自 facebook 的开源库 hydra 的一种典型使用场景。
-
+    一个用于加载配置文件的装饰器，参考自开源库 hydra，其中的一种典型的使用场景。
     ```
     import hydra
 
