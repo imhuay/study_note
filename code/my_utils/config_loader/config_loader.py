@@ -25,7 +25,7 @@ import sys
 import json
 import functools
 
-from ._bunch import Bunch
+from .bunch import Bunch
 
 ALLOW_FILE_TYPE = {'json', 'yaml'}
 
