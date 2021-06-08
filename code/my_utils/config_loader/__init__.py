@@ -8,7 +8,7 @@ Author:
     huayang
     
 Subject:
-    
+    一个用于加载配置文件的装饰器，可用于代替 argparse
 """
 
 from .bunch import Bunch
