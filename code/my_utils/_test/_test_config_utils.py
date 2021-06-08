@@ -12,7 +12,7 @@ Subject:
 """
 
 import sys
-from config_utils import load_config
+from config_loader import load_config
 
 
 @load_config()

@@ -11,5 +11,5 @@ Subject:
     
 """
 
-from ._bunch import Bunch
-from ._config_loader import load_config
+from .bunch import Bunch
+from .config_loader import load_config
