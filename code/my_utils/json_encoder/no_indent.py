@@ -51,32 +51,3 @@ class NoIndentEncoder(json.JSONEncoder):
         for k, v in self._replacement_map.items():
             result = result.replace('"{}"'.format(self.FORMAT_SPEC.format(k)), v)
         return result
-
-
-if __name__ == '__main__':
-    """"""
-    # 示例 1
-    json_data = {}
-    grid_list = [["a", "一"], ["b", "二"]]
-    for did, it in zip(["1", "2"], grid_list):
-        json_data[did] = NoIndent(it)
-
-    json_data = json.dumps(json_data, cls=NoIndentEncoder, ensure_ascii=False, sort_keys=True, indent=4)
-    print(json_data)
-    """
-    {
-        "1": ["a", "一"],
-        "2": ["b", "二"]
-    }
-    """
-
-    # 示例 2
-    json_data = {}
-    grid_list = [["a", "一"], ["b", "二"]]
-    for did, iid, it in zip(["1", "2"], ['A', 'B'], grid_list):
-        # tmp = {iid: NoIndent(it)}  # err，NoIndent 不能嵌套，只需要包在最外层
-        tmp = {iid: it}
-        json_data[did] = NoIndent(tmp)
-
-    json_data = json.dumps(json_data, cls=NoIndentEncoder, ensure_ascii=False, sort_keys=True, indent=4)
-    print(json_data)
