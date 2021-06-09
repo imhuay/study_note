@@ -12,7 +12,7 @@ Subject:
     ```
     import hydra
 
-    @hydra.main(config_name="config.yaml")
+    @hydra.main("config.yaml")
     def main(cfg):
         ...
     ```
@@ -32,7 +32,7 @@ ALLOW_FILE_TYPE = {'json', 'yaml'}
 
 def _load_config_json(config_path):
     with open(config_path) as fp:
-        config = Bunch.from_dict(json.load(fp))
+        config = json.load(fp)
     return config
 
 
@@ -40,10 +40,10 @@ def _load_config_yaml(config_path):
     try:
         import yaml
     except:
-        raise ValueError('No yaml lib, please `pip install pyyaml`.')
+        raise ValueError('No `yaml` module, please `pip install pyyaml`.')
 
     with open(config_path) as fp:
-        config = Bunch.from_dict(yaml.safe_load(fp.read()))
+        config = yaml.safe_load(fp.read())
     return config
 
 
@@ -75,32 +75,48 @@ def _load_config_file(file_path, file_type):
     return cfg
 
 
-def load_config(file_path=None, file_type=None):
+def load_config(file_path=None, file_type=None, config_cls=None):
     """
     配置文件加载装饰器
     
     Args:
         file_path: 
         file_type: 
+        config_cls: 
         
     Examples:
-        # 场景 1
-        ```
+        # 场景 1：显示指定配置文件位置
         @load_config('_test/test_config.json')
         def main(cfg):
             """"""
-            print(cfg)
-        ```
+            print(cfg.a)
+            print(cfg.b)
+            print(cfg.c.d)  # 可以直接点取二级参数
         
-        # 场景 2
-        ```
+        # 场景 2：在命令行确定文件位置
         @load_config()
         def main(cfg):
             """"""
-            print(cfg)
+            print(cfg.a)
+            print(cfg.b)
+            print(cfg.c.d)  # 可以直接点取二级参数
         
         > python xxx.py _test/test_config.yaml
-        ```
+        
+        # 场景 3: 自定义配置类，优点是有提示，缺点是二级参数只能通过字典方式提取
+        class TestConfig(BaseConfig):
+            def __init__(self, **kwargs):
+                self.a = None
+                self.b = None
+                self.c = None
+                super(TestConfig, self).__init__(**kwargs)
+        
+        @load_config(config_cls=TestConfig)
+        def main(cfg):
+            """"""
+            print(cfg.a)
+            print(cfg.b)
+            print(cfg.c['d'])  # 二级参数只能用字典方式提取
     """
 
     def main_decorator(func):
@@ -110,6 +126,10 @@ def load_config(file_path=None, file_type=None):
         def decorated_main():
             """"""
             cfg = _load_config_file(file_path, file_type)
+            if config_cls is None:
+                cfg = Bunch.from_dict(cfg)
+            else:
+                cfg = config_cls(**cfg)
             func(cfg)
 
         return decorated_main
