@@ -11,13 +11,9 @@ Subject:
     
 """
 
-import os
-import sys
 import json
 
-sys.path.insert(0, os.path.abspath('../..'))
-
-from json_encoder.no_indent import NoIndent, NoIndentEncoder
+from my_utils.json_encoder.no_indent import NoIndent, NoIndentEncoder
 
 
 def _test_no_indent():
@@ -34,8 +30,10 @@ def _test_no_indent():
         # json_data_2[did] = NoIndent({iid: NoIndent(it)})  # err，NoIndent 不能嵌套，只需要包在最外层
 
     json_data_1 = json.dumps(json_data_1, cls=NoIndentEncoder, ensure_ascii=False, sort_keys=True, indent=4)
-    json_data_2 = json.dumps(json_data_2, cls=NoIndentEncoder, ensure_ascii=False, sort_keys=True, indent=4)
     fw_1.write(json_data_1)
+    json_data_2 = json.dumps(json_data_2, cls=NoIndentEncoder, ensure_ascii=False, sort_keys=True, indent=4)
+    fw_2.write(json_data_2)
+
     print(json_data_1)
     """
     {
@@ -47,7 +45,7 @@ def _test_no_indent():
         }
     }
     """
-    fw_2.write(json_data_2)
+
     print(json_data_2)
     """
     {
@@ -58,11 +56,4 @@ def _test_no_indent():
 
 
 if __name__ == '__main__':
-
     _test_no_indent()
-    """
-    {
-        "1": {"A": ["a", "一"]},
-        "2": {"B": ["b", "二"]}
-    }
-    """
