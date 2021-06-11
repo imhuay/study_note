@@ -2,8 +2,9 @@
 .idea/
 _out/
 .pytest_cache/
-model_file/
 .ipynb_checkpoints/
+model_file/
+out_model/
 
 # 临时文件
 *.iml
