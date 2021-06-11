@@ -12,6 +12,7 @@ Index
     - [RoBERTa](#roberta)
         - [中文 RoBERTa](#中文-roberta)
     - [SentenceBERT](#sentencebert)
+    - [ConSERT](#consert)
 
 <!-- /TOC -->
 
@@ -97,3 +98,8 @@ Index
 > 
 
 
+### ConSERT
+> 【2021】[ConSERT: A Contrastive Framework for Self-Supervised Sentence Representation Transfer](https://arxiv.org/abs/2105.11741)
+>> 句向量、无监督对比学习
+
+>>【GitHub】[yym6472/ConSERT](https://github.com/yym6472/ConSERT)

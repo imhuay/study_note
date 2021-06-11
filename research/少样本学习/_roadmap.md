@@ -1,7 +1,7 @@
-学习路径
+数据增强
 ===
 
-- 数据增强（扩充）
+### 数据扩充（显式）
     - EDA（Easy Data Augmentation）
         - 论文
             - Easy data augmentation techniques for boosting performance on text classification tasks
@@ -11,22 +11,27 @@
             - 【中文】https://github.com/wac81/textda
     - UDA（Unsupervised Data Augmentation）
 
-- 数据增强（融合）
-    - mixup
-        - 论文
-            - 【NLP】Augmenting Data with Mixup for Sentence Classification: An Empirical Study
-            - 【CV】mixup: Beyond empirical risk minimization
-    - Manifold Mixup 
-        - 论文
-            - 【CV】Manifold Mixup: Better Representations byInterpolating Hidden States
-    - SeqMix
-        - 论文
-            - Sequence-Level Mixed Sample Data Augmentation
-    - mixTemporal
-    - mixText
-        - 论文
-            - Linguistically-Informed Interpolation of Hidden Space for Semi-Supervised Text Classification
-    
+### 数据融合（隐式）
+- mixup
+    - 论文
+        - 【NLP】Augmenting Data with Mixup for Sentence Classification: An Empirical Study
+        - 【CV】mixup: Beyond empirical risk minimization
+- Manifold Mixup 
+    - 论文
+        - 【CV】Manifold Mixup: Better Representations byInterpolating Hidden States
+- SeqMix
+    - 论文
+        - Sequence-Level Mixed Sample Data Augmentation
+- mixTemporal
+- mixText
+    - 论文
+        - Linguistically-Informed Interpolation of Hidden Space for Semi-Supervised Text Classification
+- 应用于 embedding 层的策略
+    > 
+    - 对抗攻击（Adversarial Attack，有监督场景）
+    - 打乱词序（Token Shuffling，针对 Transformer 结构）
+    - 裁剪（Cutoff）
+    - Dropout
     
 
 - 元学习
