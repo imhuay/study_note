@@ -36,6 +36,9 @@ from my_utils.config_loader import BaseConfig
 
 from accelerate import Accelerator
 
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
+                    datefmt='%Y/%m/%d %H:%M:%S',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -56,14 +59,15 @@ class Config(BaseConfig):
 
         # 常用超参
         self.batch_size: int = 32
-        self.weight_decay: float = 0.
+        self.weight_decay: float = 0.01
         self.learning_rate: float = 1.e-5
         self.num_train_epochs: int = 3
+        self.max_train_steps = None  # 与 num_train_epochs 二选一
         self.num_warmup_steps: int = 0
         self.gradient_accumulation_steps: int = 2  # 梯度累计，模拟更大的 batch_size
 
         # base 模型
-        self.model_name_or_path = 'hfl/chinese-roberta-wwm-ext'
+        self.base_model_id = 'hfl/chinese-roberta-wwm-ext'
         # 模型模型索引：https://huggingface.co/models?filter=bert
         # 常用中文模型：
         #   'bert-base-chinese'
@@ -79,7 +83,7 @@ class Config(BaseConfig):
         self.lr_scheduler_type = 'linear'
         self.random_seed = None
         self.pad_to_max_length = True
-        self.max_train_steps = None
+        self.num_train_data = None
 
         super(Config, self).__init__(**kwargs)
 
@@ -117,60 +121,62 @@ def data_prepare(args: Config, tokenizer):
         return result
 
     dss = dss.map(row_precess, batched=True, remove_columns=dss["train"].column_names)  # 把原来的列移除
-
-    train_dataset, eval_dataset = dss['train'], dss['validation']
+    train_ds, eval_ds = dss['train'], dss['validation']
 
     # 打印样例数据
-    for index in random.sample(range(len(train_dataset)), 3):
-        logger.info(f"Sample {index} of the training set: {train_dataset[index]}.")
+    # for index in random.sample(range(len(train_ds)), 3):
+    #     logger.info(f"Sample {index} of the training set: {train_ds[index]}.")
 
-    return train_dataset, eval_dataset
+    args.num_train_data = len(train_ds)
+    train_dl = DataLoader(train_ds, shuffle=True, collate_fn=default_data_collator, batch_size=args.batch_size)
+    val_dl = DataLoader(eval_ds, collate_fn=default_data_collator, batch_size=args.batch_size)
+
+    return train_dl, val_dl
 
 
 def optimizer_prepare(args: Config, model):
     """"""
     no_decay = ["bias", "LayerNorm.weight"]
-    optimizer_grouped_parameters = [
-        {
-            "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-            "weight_decay": args.weight_decay,
-        },
-        {
-            "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
-            "weight_decay": 0.0,
-        },
-    ]
-    optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate)
 
+    def do_weight_decay(n):
+        return all(r not in n for r in no_decay)
+
+    # named_parameters = list(model.named_parameters())
+    params_do_weight_decay, params_no_weight_decay = [], []
+    for param_name, param in model.named_parameters():
+        if do_weight_decay(param_name):
+            params_do_weight_decay.append(param)
+        else:
+            params_no_weight_decay.append(param)
+
+    optimizer_grouped_parameters = [{"params": params_do_weight_decay, "weight_decay": args.weight_decay},
+                                    {"params": params_no_weight_decay, "weight_decay": 0.0}]
+    optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate)
     return optimizer
 
 
-def run_train(args: Config):
+def set_random_seed(args: Config):
     """"""
-    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
-                        datefmt='%Y/%m/%d %H:%M:%S',
-                        level=logging.INFO)
-
-    accelerator = Accelerator()
-    logger.info(accelerator.state)
-
-    # 设置随机数
     if args.random_seed is not None:
         assert isinstance(args.random_seed, int), '`args.random_seed` should be int.'
         set_seed(args.random_seed)
 
-    # 准备模型相关组件
-    config = AutoConfig.from_pretrained(args.model_name_or_path, num_labels=args.num_labels)
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
-    model = AutoModelForSequenceClassification.from_pretrained(args.model_name_or_path, config=config)
 
-    # 准备数据
-    train_ds, eval_ds = data_prepare(args, tokenizer)
-    print(train_ds)
-    train_dl = DataLoader(train_ds, shuffle=True, collate_fn=default_data_collator, batch_size=args.batch_size)
-    val_dl = DataLoader(eval_ds, collate_fn=default_data_collator, batch_size=args.batch_size)
+def main(args: Config):
+    """"""
+    accelerator = Accelerator()
+    logger.info(f'\n{accelerator.state}')
 
-    # 优化器
+    # 设置随机数
+    set_random_seed(args)
+
+    # 模型准备
+    model, tokenizer = model_prepare(args)
+
+    # 数据准备
+    train_dl, val_dl = data_prepare(args, tokenizer)
+
+    # 优化器准备
     optimizer = optimizer_prepare(args, model)
 
     # accelerator prepare
@@ -190,8 +196,8 @@ def run_train(args: Config):
     # train
     total_batch_size = args.batch_size * accelerator.num_processes * args.gradient_accumulation_steps
     logger.info("***** Running training *****")
-    logger.info(f"  Batch size = {total_batch_size}")
-    logger.info(f"  Num examples = {len(train_ds)}")
+    logger.info(f"  Total batch size = {total_batch_size}")
+    logger.info(f"  Num examples = {args.num_train_data}")
     logger.info(f"  Num epochs = {args.num_train_epochs}")
     logger.info(f"  Gradient accumulation steps = {args.gradient_accumulation_steps}")
     logger.info(f"  Total optimization steps = {args.max_train_steps}")
@@ -230,16 +236,27 @@ def run_train(args: Config):
         logger.info(f"epoch {epoch}: {eval_metric}")
 
     # 模型保存
+    model_save(args, accelerator, model)
+
+
+def model_save(args, accelerator, model):
     accelerator.wait_for_everyone()
     model = accelerator.unwrap_model(model)
     model.save_pretrained(args.output_dir, save_function=accelerator.save)
+
+
+def model_prepare(args):
+    config = AutoConfig.from_pretrained(args.base_model_id, num_labels=args.num_labels)
+    model = AutoModelForSequenceClassification.from_pretrained(args.base_model_id, config=config)
+    tokenizer = AutoTokenizer.from_pretrained(args.base_model_id)
+    return model, tokenizer
 
 
 def run_predict(args: Config):
     """"""
     from transformers import TextClassificationPipeline
     model = AutoModelForSequenceClassification.from_pretrained(args.output_dir, num_labels=args.num_labels)
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+    tokenizer = AutoTokenizer.from_pretrained(args.base_model_id)
     classifier = TextClassificationPipeline(model=model, tokenizer=tokenizer)
     ret = classifier('my_test_sentence_1')
     print(ret)
@@ -248,5 +265,5 @@ def run_predict(args: Config):
 if __name__ == '__main__':
     """"""
     cfg = Config(train_file=['./data/my_text_1.json', './data/my_text_2.json'], val_file='./data/my_test_file.json')
-    run_train(cfg)
+    main(cfg)
     run_predict(cfg)
