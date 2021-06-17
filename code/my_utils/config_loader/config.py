@@ -18,6 +18,8 @@ class BaseConfig:
     def __init__(self, **kwargs):
         """"""
         for k, v in kwargs.items():
+            if k not in self.__dict__:
+                raise ValueError(f'No such config item: {k}')
             setattr(self, k, v)
 
 
@@ -46,3 +48,11 @@ class BertConfig(BaseConfig):
 
         super(BertConfig, self).__init__(**kwargs)
 
+
+if __name__ == '__main__':
+    """"""
+    cfg = BertConfig(num_attention_heads=6, num_hidden_layers=6)
+    print(cfg.num_attention_heads)  # 6
+    print(cfg.num_hidden_layers)  # 6
+
+    cfg = BertConfig(sth=6)  # ValueError: No such config item: sth
