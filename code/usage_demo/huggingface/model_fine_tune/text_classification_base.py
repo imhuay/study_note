@@ -24,6 +24,7 @@ import torch.nn as nn
 
 from tqdm.auto import tqdm
 from datasets import load_dataset, load_metric
+from accelerate import Accelerator
 
 from torch.utils.data.dataloader import DataLoader
 
@@ -33,8 +34,6 @@ from transformers.data.data_collator import default_data_collator
 from transformers.models.auto import AutoModelForSequenceClassification, AutoTokenizer, AutoConfig
 
 from my_utils.config_loader import BaseConfig
-
-from accelerate import Accelerator
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
                     datefmt='%Y/%m/%d %H:%M:%S',
