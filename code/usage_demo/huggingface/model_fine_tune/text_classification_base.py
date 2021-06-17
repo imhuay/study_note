@@ -87,8 +87,6 @@ class Config(BaseConfig):
         self.pad_to_max_length = True
         self.num_train_data = None
 
-        print(self.__dict__)
-
         super(Config, self).__init__(**kwargs)
 
 
@@ -270,7 +268,7 @@ def run_predict(args: Config):
     model = AutoModelForSequenceClassification.from_pretrained(args.output_dir, num_labels=args.num_labels)
     tokenizer = AutoTokenizer.from_pretrained(args.base_model_id)
     # classifier = pipeline('text-classification', model=model, tokenizer=tokenizer)
-    classifier = TextClassificationPipeline(model=model, tokenizer=tokenizer)
+    classifier = TextClassificationPipeline(model=model, tokenizer=tokenizer, return_all_scores=True)
     ret = classifier('my_test_sentence_1')
     print(ret)
 
