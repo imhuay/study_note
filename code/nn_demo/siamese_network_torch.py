@@ -90,11 +90,9 @@ class ContrastiveLoss(nn.Module):
         self.margin = margin
 
     def forward(self, output1, output2, label):
-        euclidean_distance = F.pairwise_distance(output1, output2, keepdim=True)
-        loss_contrastive = torch.mean((1 - label) * torch.pow(euclidean_distance, 2) +
-                                      label * torch.pow(torch.clamp(self.margin - euclidean_distance, min=0.0), 2))
-
-        return loss_contrastive
+        distance = F.pairwise_distance(output1, output2, keepdim=True)
+        losses = (1 - label) * distance.pow(2) + label * F.relu(self.margin - distance).pow(2)
+        return losses.mean()
 
 
 class TripletLoss(nn.Module):
