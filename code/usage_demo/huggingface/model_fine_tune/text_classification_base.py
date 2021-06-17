@@ -53,6 +53,7 @@ class Config(BaseConfig):
 
         self.train_file: Union[str, List[str]] = ''
         self.val_file: Union[str, List[str]] = ''
+        self.test_file: Union[str, List[str]] = ''
         self.label_column_name = 'label'  # label 列的名称，如果存在
         self.num_labels: int = 2
         self.max_length: int = 128
@@ -78,6 +79,7 @@ class Config(BaseConfig):
         #   'hfl/chinese-macbert-base'
         #   'hfl/chinese-macbert-large'
 
+        self.no_decay = ["bias", "LayerNorm.weight"]
         self.output_dir = './out_model'
         self.metric = 'accuracy'
         self.lr_scheduler_type = 'linear'
@@ -85,13 +87,63 @@ class Config(BaseConfig):
         self.pad_to_max_length = True
         self.num_train_data = None
 
+        print(self.__dict__)
+
         super(Config, self).__init__(**kwargs)
+
+
+def set_random_seed(args: Config):
+    """"""
+    if args.random_seed is not None:
+        assert isinstance(args.random_seed, int), '`args.random_seed` should be int.'
+        set_seed(args.random_seed)
+
+
+def main(args: Config):
+    """"""
+    accelerator = Accelerator()
+    logger.info(f'accelerator state:\n{accelerator.state}')
+
+    # 设置随机数
+    set_random_seed(args)
+
+    # 模型准备
+    logger.info('***** Model prepare *****')
+    model, tokenizer = model_prepare(args)
+
+    # 数据准备
+    logger.info('***** Data prepare *****')
+    train_dl, val_dl = data_prepare(args, tokenizer)
+
+    # 优化器准备
+    logger.info('***** Optimizer prepare *****')
+    optimizer = optimizer_prepare(args, model)
+
+    # accelerator prepare
+    model, optimizer, train_dl, val_dl = accelerator.prepare(model, optimizer, train_dl, val_dl)
+
+    # prepare lr_scheduler
+    num_update_steps_per_epoch = math.ceil(len(train_dl) / args.gradient_accumulation_steps)
+    args.max_train_steps = args.num_train_epochs * num_update_steps_per_epoch
+    lr_scheduler = get_scheduler(name=args.lr_scheduler_type,
+                                 optimizer=optimizer,
+                                 num_warmup_steps=args.num_warmup_steps,
+                                 num_training_steps=args.max_train_steps, )
+
+    # train
+    logger.info("***** Start training *****")
+    train(args, model, optimizer, train_dl, val_dl, accelerator, lr_scheduler)
+
+    # 模型保存
+    logger.info("***** Model save *****")
+    model_save(args, accelerator, model)
 
 
 def data_prepare(args: Config, tokenizer):
     """"""
     dss = load_dataset(args.file_type,
-                       data_files={'train': args.train_file, 'validation': args.val_file}, )
+                       data_files={'train': args.train_file,
+                                   'validation': args.val_file})
 
     # 计算 num_labels
     label_list = sorted(dss["train"].unique("label"))
@@ -136,10 +188,9 @@ def data_prepare(args: Config, tokenizer):
 
 def optimizer_prepare(args: Config, model):
     """"""
-    no_decay = ["bias", "LayerNorm.weight"]
 
     def do_weight_decay(n):
-        return all(r not in n for r in no_decay)
+        return all(r not in n for r in args.no_decay)
 
     # named_parameters = list(model.named_parameters())
     params_do_weight_decay, params_no_weight_decay = [], []
@@ -155,41 +206,7 @@ def optimizer_prepare(args: Config, model):
     return optimizer
 
 
-def set_random_seed(args: Config):
-    """"""
-    if args.random_seed is not None:
-        assert isinstance(args.random_seed, int), '`args.random_seed` should be int.'
-        set_seed(args.random_seed)
-
-
-def main(args: Config):
-    """"""
-    accelerator = Accelerator()
-    logger.info(f'\n{accelerator.state}')
-
-    # 设置随机数
-    set_random_seed(args)
-
-    # 模型准备
-    model, tokenizer = model_prepare(args)
-
-    # 数据准备
-    train_dl, val_dl = data_prepare(args, tokenizer)
-
-    # 优化器准备
-    optimizer = optimizer_prepare(args, model)
-
-    # accelerator prepare
-    model, optimizer, train_dl, val_dl = accelerator.prepare(model, optimizer, train_dl, val_dl)
-
-    # prepare lr_scheduler
-    num_update_steps_per_epoch = math.ceil(len(train_dl) / args.gradient_accumulation_steps)
-    args.max_train_steps = args.num_train_epochs * num_update_steps_per_epoch
-    lr_scheduler = get_scheduler(name=args.lr_scheduler_type,
-                                 optimizer=optimizer,
-                                 num_warmup_steps=args.num_warmup_steps,
-                                 num_training_steps=args.max_train_steps, )
-
+def train(args: Config, model, optimizer, train_dl, val_dl, accelerator, lr_scheduler):
     # metric
     metric = load_metric(args.metric)
 
@@ -227,25 +244,20 @@ def main(args: Config):
         for step, batch in enumerate(val_dl):
             outputs = model(**batch)
             predictions = outputs.logits.argmax(dim=-1)
-            metric.add_batch(
-                predictions=accelerator.gather(predictions),
-                references=accelerator.gather(batch["labels"]),
-            )
+            metric.add_batch(predictions=accelerator.gather(predictions),
+                             references=accelerator.gather(batch["labels"]))
 
         eval_metric = metric.compute()
         logger.info(f"epoch {epoch}: {eval_metric}")
 
-    # 模型保存
-    model_save(args, accelerator, model)
 
-
-def model_save(args, accelerator, model):
+def model_save(args: Config, accelerator, model):
     accelerator.wait_for_everyone()
     model = accelerator.unwrap_model(model)
     model.save_pretrained(args.output_dir, save_function=accelerator.save)
 
 
-def model_prepare(args):
+def model_prepare(args: Config):
     config = AutoConfig.from_pretrained(args.base_model_id, num_labels=args.num_labels)
     model = AutoModelForSequenceClassification.from_pretrained(args.base_model_id, config=config)
     tokenizer = AutoTokenizer.from_pretrained(args.base_model_id)
@@ -254,9 +266,10 @@ def model_prepare(args):
 
 def run_predict(args: Config):
     """"""
-    from transformers import TextClassificationPipeline
+    from transformers import pipeline, TextClassificationPipeline
     model = AutoModelForSequenceClassification.from_pretrained(args.output_dir, num_labels=args.num_labels)
     tokenizer = AutoTokenizer.from_pretrained(args.base_model_id)
+    # classifier = pipeline('text-classification', model=model, tokenizer=tokenizer)
     classifier = TextClassificationPipeline(model=model, tokenizer=tokenizer)
     ret = classifier('my_test_sentence_1')
     print(ret)
@@ -264,6 +277,8 @@ def run_predict(args: Config):
 
 if __name__ == '__main__':
     """"""
-    cfg = Config(train_file=['./data/my_text_1.json', './data/my_text_2.json'], val_file='./data/my_test_file.json')
+    cfg = Config(train_file=['./data/my_text_1.json', './data/my_text_2.json'],
+                 val_file='./data/my_test_file.json')
+
     main(cfg)
     run_predict(cfg)
