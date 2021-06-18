@@ -14,13 +14,16 @@ Subject:
 
 class BaseConfig:
     """"""
-
     def __init__(self, **kwargs):
         """"""
         for k, v in kwargs.items():
             if k not in self.__dict__:
                 raise ValueError(f'No such config item: {k}')
             setattr(self, k, v)
+
+    def __str__(self):
+        """"""
+        return 'Config item ls:\n\t%s' % '\n\t'.join([f'{k} = {str(v)}' for k, v in self.__dict__.items()])
 
 
 class BertConfig(BaseConfig):

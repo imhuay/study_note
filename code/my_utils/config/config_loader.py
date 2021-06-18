@@ -111,7 +111,7 @@ def load_config(file_path=None, file_type=None, config_cls=None):
                 self.c = None
                 super(TestConfig, self).__init__(**kwargs)
         
-        @load_config(config_cls=TestConfig)
+        @load_config('_test/test_config.json', config_cls=TestConfig)
         def main(cfg):
             """"""
             print(cfg.a)

@@ -11,6 +11,6 @@ Subject:
     一个用于加载配置文件的装饰器，可用于代替 argparse
 """
 
-from .config import BaseConfig
 from .bunch import Bunch
+from .config_class import BaseConfig
 from .config_loader import load_config

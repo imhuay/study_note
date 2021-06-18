@@ -1,0 +1,3 @@
+item_a: A
+item_b: B
+# item_d: D  # err：因为对应的配置类中没有该项

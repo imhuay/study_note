@@ -12,7 +12,7 @@ Subject:
 """
 
 import sys
-from my_utils.config_loader import load_config
+from my_utils.config import load_config
 
 
 @load_config()
@@ -33,7 +33,7 @@ def main2(cfg):
 
 def main3():
     """"""
-    from my_utils.config_loader.config import BaseConfig
+    from my_utils.config.config import BaseConfig
 
     class TestConfig(BaseConfig):
         """"""
