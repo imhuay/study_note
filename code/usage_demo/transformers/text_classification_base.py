@@ -133,7 +133,7 @@ def main(args: Config):
 
     # 模型保存
     logger.info("***** Model save *****")
-    model_save(args, accelerator, model)
+    model_save(args, accelerator, model, tokenizer)
 
 
 def data_prepare(args: Config, tokenizer):
@@ -248,10 +248,11 @@ def train(args: Config, model, optimizer, train_dl, val_dl, accelerator, lr_sche
         logger.info(f"epoch {epoch}: {eval_metric}")
 
 
-def model_save(args: Config, accelerator, model):
+def model_save(args: Config, accelerator, model, tokenizer):
     accelerator.wait_for_everyone()
     model = accelerator.unwrap_model(model)
     model.save_pretrained(args.output_dir, save_function=accelerator.save)
+    tokenizer.save_pretrained(args.output_dir)
 
 
 def model_prepare(args: Config):
@@ -265,7 +266,7 @@ def run_predict(args: Config):
     """"""
     from transformers import pipeline, TextClassificationPipeline
     model = AutoModelForSequenceClassification.from_pretrained(args.output_dir, num_labels=args.num_labels)
-    tokenizer = AutoTokenizer.from_pretrained(args.base_model_id)
+    tokenizer = AutoTokenizer.from_pretrained(args.output_dir)
     # classifier = pipeline('text-classification', model=model, tokenizer=tokenizer)
     classifier = TextClassificationPipeline(model=model, tokenizer=tokenizer, return_all_scores=True)
     ret = classifier('my_test_sentence_1')
