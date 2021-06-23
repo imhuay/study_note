@@ -13,10 +13,10 @@ Subject:
 import functools
 from typing import Callable
 
-from my_utils.basic import multi_thread_wrapper
+from my_utils.basic import run_multi_thread
 
 
-def run_multi_thread(args, **kwargs):
+def multi_thread_wrapper(args, **kwargs):
     """
     多线程执行装饰器
 
@@ -29,7 +29,7 @@ def run_multi_thread(args, **kwargs):
         @functools.wraps(func)
         def decorated_func():
             _args = args() if isinstance(args, Callable) else args
-            return multi_thread_wrapper(func, _args, **kwargs)
+            return run_multi_thread(func, _args, **kwargs)
 
         return decorated_func
 
@@ -42,7 +42,7 @@ def _test_simple():
     def get_args():
         return list([(str(i), str(i+1)) for i in range(1000)])
 
-    @run_multi_thread(get_args, star_args=True)
+    @multi_thread_wrapper(get_args, star_args=True)
     def some_func(s, x):
         """一个简单的测试函数，输入 s 加一个后缀"""
         # time.sleep(math.sqrt(int(s)))
@@ -53,7 +53,7 @@ def _test_simple():
 
     args = list([(str(i), str(i + 1)) for i in range(1000)])
 
-    @run_multi_thread(args)
+    @multi_thread_wrapper(args)
     def some_func_x(a):
         s, x = a[0], a[1]
         return s + '-' + x

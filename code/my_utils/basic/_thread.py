@@ -14,7 +14,7 @@ from tqdm import tqdm
 from multiprocessing.pool import ThreadPool
 
 
-def multi_thread_wrapper(func, args, n_thread=None, ordered=False, use_imap=False, star_args=False):
+def run_multi_thread(func, args, n_thread=None, ordered=False, use_imap=False, star_args=False):
     """
     Args:
         func: 回调函数
@@ -71,14 +71,14 @@ def _test_star_args():
 
     # 构造参数序列
     args = list([(str(i), str(i+1)) for i in range(1000)])
-    ret1 = multi_thread_wrapper(some_func, args, star_args=True, ordered=True)
+    ret1 = run_multi_thread(some_func, args, star_args=True, ordered=True)
     print(ret1)
 
     def ss_func(a):  # 包成一个参数
         s, x = a
         return some_func(s, x)
 
-    ret2 = multi_thread_wrapper(ss_func, args, star_args=False)
+    ret2 = run_multi_thread(ss_func, args, star_args=False)
     # print(ret2)
     assert ret1 == ret2
 
@@ -146,7 +146,7 @@ def _test_download():
         return args
 
     args = get_args()
-    ret = multi_thread_wrapper(file_download, args, star_args=True)
+    ret = run_multi_thread(file_download, args, star_args=True)
     print(ret)
 
 

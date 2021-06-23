@@ -16,4 +16,4 @@ from .system_utils import SystemUtils
 from .request_utils import RequestUtils
 from .serialize_utils import SerializeUtils
 
-from ._thread import multi_thread_wrapper
+from ._thread import run_multi_thread
