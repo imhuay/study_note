@@ -2,36 +2,27 @@
 # -*- coding:utf-8 -*-
 """
 Time:
-    2021-06-08 4:30 下午
+    2021-06-23 9:53 下午
     
 Author:
     huayang
     
 Subject:
-    自定义 json 格式输出，对指定对象不进行缩进
-
-    示例：
-    ```
-    {
-        "1": ["a", "一"],  # 这里的列表没有缩进
-        "2": ["b", "二"]
-    }
-    ```
+    
 """
 
 import json
 from _ctypes import PyObj_FromPtr
 
 
-class NoIndent(object):
-    """ Value wrapper. """
-
-    def __init__(self, value):
-        self.value = value
-
-
 class NoIndentEncoder(json.JSONEncoder):
     FORMAT_SPEC = '@@{}@@'
+
+    class NoIndent(object):
+        """ Value wrapper. """
+
+        def __init__(self, value):
+            self.value = value
 
     def __init__(self, *args, **kwargs):
         super(NoIndentEncoder, self).__init__(*args, **kwargs)
@@ -41,7 +32,7 @@ class NoIndentEncoder(json.JSONEncoder):
         self._no_indent_obj_ids = set()  # 使用 PyObj_FromPtr，保存 id(obj) 即可
 
     def default(self, o):
-        if isinstance(o, NoIndent):
+        if isinstance(o, NoIndentEncoder.NoIndent):
             # self._replacement_map[id(o)] = json.dumps(o.value, **self.kwargs)
             self._no_indent_obj_ids.add(id(o))
             return self.FORMAT_SPEC.format(id(o))
@@ -57,8 +48,12 @@ class NoIndentEncoder(json.JSONEncoder):
             result = result.replace('"{}"'.format(self.FORMAT_SPEC.format(oid)), tmp_str)
         return result
 
+    @staticmethod
+    def wrap(v):
+        return NoIndentEncoder.NoIndent(v)
 
-def _test_no_indent():
+
+def _test_NoIndentEncoder():
     """"""
     import os
     os.makedirs('./-out', exist_ok=True)
@@ -70,8 +65,8 @@ def _test_no_indent():
     json_data_2 = {}
     grid_list = [["a", "一"], ["b", "二"]]
     for did, iid, it in zip(["1", "2"], ['A', 'B'], grid_list):
-        json_data_1[did] = {iid: NoIndent(it)}
-        json_data_2[did] = NoIndent({iid: it})
+        json_data_1[did] = {iid: NoIndentEncoder.wrap(it)}
+        json_data_2[did] = NoIndentEncoder.wrap({iid: it})
         # json_data_2[did] = NoIndent({iid: NoIndent(it)})  # err，NoIndent 不能嵌套，只需要包在最外层
 
     json_data_1 = json.dumps(json_data_1, cls=NoIndentEncoder, ensure_ascii=False, sort_keys=True, indent=4)
@@ -101,4 +96,4 @@ def _test_no_indent():
 
 
 if __name__ == '__main__':
-    _test_no_indent()
+    _test_NoIndentEncoder()
