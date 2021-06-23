@@ -48,3 +48,4 @@
         - 对抗元学习（ADML, ADversarial Meta Learning）
         - CAML（Context Adaptation for Meta Learning, 上下文适应元学习）
 
+- 主动学习(Activate Learning)
