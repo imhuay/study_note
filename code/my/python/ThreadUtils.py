@@ -8,7 +8,7 @@ Author:
     huayang
     
 Subject:
-    多线程
+    多线程相关
 """
 from tqdm import tqdm
 from multiprocessing.pool import ThreadPool
