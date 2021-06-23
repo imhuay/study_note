@@ -25,7 +25,7 @@ import sys
 import json
 import functools
 
-from .bunch import Bunch
+from my_utils.config import Bunch
 
 ALLOW_FILE_TYPE = {'json', 'yaml'}
 
@@ -123,7 +123,7 @@ def load_config(file_path=None, file_type=None, config_cls=None):
         """"""
 
         @functools.wraps(func)
-        def decorated_main():
+        def decorated_func():
             """"""
             cfg = _load_config_file(file_path, file_type)
             if config_cls is None:
@@ -132,6 +132,6 @@ def load_config(file_path=None, file_type=None, config_cls=None):
                 cfg = config_cls(**cfg)
             func(cfg)
 
-        return decorated_main
+        return decorated_func
 
     return main_decorator

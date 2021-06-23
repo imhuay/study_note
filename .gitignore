@@ -5,6 +5,7 @@ _out/
 .ipynb_checkpoints/
 model_file/
 out_model/
+pkgs/
 
 # 临时文件
 *.iml
