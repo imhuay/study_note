@@ -18,6 +18,7 @@ import logging
 
 from typing import *
 
+import torch
 import datasets
 import transformers
 import torch.nn as nn
@@ -80,6 +81,8 @@ class Config(BaseConfig):
 
         self.no_decay = ["bias", "LayerNorm.weight"]
         self.output_dir = './out_model'
+        self.save_pt_model = False
+        self.pt_model_path = os.path.join(self.output_dir, 'model.pt')
         self.metric = 'accuracy'
         self.lr_scheduler_type = 'linear'
         self.random_seed = None
@@ -254,6 +257,9 @@ def model_save(args: Config, accelerator, model, tokenizer):
     model.save_pretrained(args.output_dir, save_function=accelerator.save)
     tokenizer.save_pretrained(args.output_dir)
 
+    if args.save_pt_model:
+        torch.save(model, os.path.join(args.output_dir, 'saved_model.pt'))
+
 
 def model_prepare(args: Config):
     config = AutoConfig.from_pretrained(args.base_model_id, num_labels=args.num_labels)
@@ -262,21 +268,38 @@ def model_prepare(args: Config):
     return model, tokenizer
 
 
-def run_predict(args: Config):
+def run_continue(args: Config):
+    """继续训练"""
+    args.base_model_id = args.output_dir
+    main(args)
+
+
+def run_predict_with_pipeline(args: Config):
     """"""
-    from transformers import pipeline, TextClassificationPipeline
-    model = AutoModelForSequenceClassification.from_pretrained(args.output_dir, num_labels=args.num_labels)
-    tokenizer = AutoTokenizer.from_pretrained(args.output_dir)
-    # classifier = pipeline('text-classification', model=model, tokenizer=tokenizer)
-    classifier = TextClassificationPipeline(model=model, tokenizer=tokenizer, return_all_scores=True)
+    from transformers import (pipeline, AutoConfig, AutoTokenizer,
+                              AutoModelForSequenceClassification, TextClassificationPipeline)
+
+    config = AutoConfig.from_pretrained(args.output_dir, num_labels=args.num_labels, local_files_only=True)
+    model = AutoModelForSequenceClassification.from_pretrained(args.output_dir, config=config, local_files_only=True)
+    tokenizer = AutoTokenizer.from_pretrained(args.output_dir, local_files_only=True)
+    classifier = pipeline('text-classification', model=model, tokenizer=tokenizer, return_all_scores=True)
+    # classifier = TextClassificationPipeline(model=model, tokenizer=tokenizer, return_all_scores=True)
     ret = classifier('my_test_sentence_1')
     print(ret)
+
+
+def run_predict_with_pt(args: Config):
+    """"""
+    # TODO: local tokenizer
+    model = torch.load(args.pt_model_path)
 
 
 if __name__ == '__main__':
     """"""
     cfg = Config(train_file=['./data/my_text_1.json', './data/my_text_2.json'],
-                 val_file='./data/my_test_file.json')
+                 val_file='./data/my_test_file.json', save_pt_model=True)
 
     main(cfg)
-    run_predict(cfg)
+    # run_continue(cfg)
+    # run_predict_with_pipeline(cfg)
+    # run_predict_with_pt(cfg)
