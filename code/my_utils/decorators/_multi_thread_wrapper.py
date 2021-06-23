@@ -16,20 +16,20 @@ from typing import Callable
 from my_utils.basic import run_multi_thread
 
 
-def multi_thread_wrapper(args_fn, **kwargs):
+def multi_thread_wrapper(args_iter, **kwargs):
     """
     多线程执行装饰器
 
     Args:
-        args_fn: 获取参数序列的函数，也可以是一个序列对象
+        args_iter: 参数序列，也可以是一个函数
         kwargs: 详见 multi_thread_wrapper 相关参数
     """
     def decorator(func):
 
         @functools.wraps(func)
         def decorated_func():
-            _args = args_fn() if isinstance(args_fn, Callable) else args_fn
-            return run_multi_thread(func, _args, **kwargs)
+            _args_iter = args_iter() if isinstance(args_iter, Callable) else args_iter
+            return run_multi_thread(func, _args_iter, **kwargs)
 
         return decorated_func
 
@@ -39,10 +39,10 @@ def multi_thread_wrapper(args_fn, **kwargs):
 def _test_simple():
     """"""
 
-    def get_args():
+    def get_args_iter():
         return list([(str(i), str(i+1)) for i in range(1000)])
 
-    @multi_thread_wrapper(get_args, star_args=True)
+    @multi_thread_wrapper(get_args_iter, star_args=True)
     def some_func(s, x):
         """一个简单的测试函数，输入 s 加一个后缀"""
         # time.sleep(math.sqrt(int(s)))
@@ -51,9 +51,9 @@ def _test_simple():
     ret = some_func()
     print(ret)
 
-    args = list([(str(i), str(i + 1)) for i in range(1000)])
+    args_ls = get_args_iter()
 
-    @multi_thread_wrapper(args)
+    @multi_thread_wrapper(args_ls)
     def some_func_x(a):
         s, x = a[0], a[1]
         return s + '-' + x
@@ -64,5 +64,4 @@ def _test_simple():
 
 if __name__ == '__main__':
     """"""
-
     _test_simple()

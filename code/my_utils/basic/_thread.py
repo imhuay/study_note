@@ -14,11 +14,11 @@ from tqdm import tqdm
 from multiprocessing.pool import ThreadPool
 
 
-def run_multi_thread(func, args, n_thread=None, ordered=False, use_imap=False, star_args=False):
+def run_multi_thread(func, args_iter, n_thread=None, ordered=False, use_imap=False, star_args=False):
     """
     Args:
         func: 回调函数
-        args: 参数序列
+        args_iter: 参数序列
         n_thread: 线程数，默认 None
         ordered: 是否有序，默认 False；
             经测试即使为 False 也是有序的，可能与具体解释器有关；
@@ -28,7 +28,7 @@ def run_multi_thread(func, args, n_thread=None, ordered=False, use_imap=False, s
             如果 func 形如 func(a, b, c)，则需要展开，而 func([a, b, c]) 则不需要；
 
     Returns:
-        func(arg) 的结果集合
+        func(args) 的结果集合
     """
     if star_args:
         _func = lambda a: func(*a)
@@ -44,10 +44,10 @@ def run_multi_thread(func, args, n_thread=None, ordered=False, use_imap=False, s
 
         if ordered:
             _func_new = lambda a: (a[0], _func(a[1]))
-            args_ls_new = [(i, arg) for i, arg in enumerate(args)]
+            args_ls_new = [(i, args) for i, args in enumerate(args_iter)]
             ret_iter = map_func(_func_new, args_ls_new)
         else:
-            ret_iter = map_func(_func, args)
+            ret_iter = map_func(_func, args_iter)
 
         if use_imap:
             ret_iter = tqdm(ret_iter)
@@ -70,15 +70,15 @@ def _test_star_args():
         return s + '-' + x
 
     # 构造参数序列
-    args = list([(str(i), str(i+1)) for i in range(1000)])
-    ret1 = run_multi_thread(some_func, args, star_args=True, ordered=True)
+    args_ls = list([(str(i), str(i+1)) for i in range(1000)])
+    ret1 = run_multi_thread(some_func, args_ls, star_args=True, ordered=True)
     print(ret1)
 
     def ss_func(a):  # 包成一个参数
         s, x = a
         return some_func(s, x)
 
-    ret2 = run_multi_thread(ss_func, args, star_args=False)
+    ret2 = run_multi_thread(ss_func, args_ls, star_args=False)
     # print(ret2)
     assert ret1 == ret2
 
@@ -120,7 +120,7 @@ def _test_download():
 
         return save_path
 
-    def get_args():
+    def get_args_iter():
 
         main_path = '-out/test'
         url_ls = ['https://p0.meituan.net/dpmerchantpic/543d27fe7f877ea881c61ec859c6ddaa63445.jpg'] * 6
@@ -145,8 +145,8 @@ def _test_download():
 
         return args
 
-    args = get_args()
-    ret = run_multi_thread(file_download, args, star_args=True)
+    args_ls = get_args_iter()
+    ret = run_multi_thread(file_download, args_ls, star_args=True)
     print(ret)
 
 
