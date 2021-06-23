@@ -25,7 +25,7 @@ import sys
 import json
 import functools
 
-from my_utils.config import Bunch
+from my.config import Bunch
 
 ALLOW_FILE_TYPE = {'json', 'yaml'}
 

@@ -13,7 +13,7 @@ Subject:
 
 import json
 
-from my_utils.json_encoder.no_indent import NoIndent, NoIndentEncoder
+from my.json_encoder.no_indent import NoIndent, NoIndentEncoder
 
 
 def _test_no_indent():

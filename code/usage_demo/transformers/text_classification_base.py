@@ -34,7 +34,7 @@ from transformers.optimization import AdamW, get_scheduler
 from transformers.data.data_collator import default_data_collator
 from transformers.models.auto import AutoModelForSequenceClassification, AutoTokenizer, AutoConfig
 
-from my_utils.config import BaseConfig
+from my.config import BaseConfig
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
                     datefmt='%Y/%m/%d %H:%M:%S',

@@ -11,7 +11,7 @@ Subject:
     
 """
 
-from my_utils.config import BaseConfig, load_config
+from my.config import BaseConfig, load_config
 
 
 class TestConfig(BaseConfig):
