@@ -16,19 +16,19 @@ from typing import Callable
 from my_utils.basic import run_multi_thread
 
 
-def multi_thread_wrapper(args, **kwargs):
+def multi_thread_wrapper(args_fn, **kwargs):
     """
     多线程执行装饰器
 
     Args:
-        args: 参数序列，也可以是一个函数，返回需要的参数序列
+        args_fn: 获取参数序列的函数，也可以是一个序列对象
         kwargs: 详见 multi_thread_wrapper 相关参数
     """
     def decorator(func):
 
         @functools.wraps(func)
         def decorated_func():
-            _args = args() if isinstance(args, Callable) else args
+            _args = args_fn() if isinstance(args_fn, Callable) else args_fn
             return run_multi_thread(func, _args, **kwargs)
 
         return decorated_func
