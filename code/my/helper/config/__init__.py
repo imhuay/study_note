@@ -12,6 +12,6 @@ Subject:
 """
 
 from .bunch import Bunch
-from .config_class import BaseConfig
+from .base_config import BaseConfig
 
-from ..decorators import load_config
+from my.decorators import load_config
