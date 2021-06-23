@@ -12,4 +12,4 @@ Subject:
 """
 
 from ._load_config import load_config
-from ._run_multi_thread import multi_thread_wrapper
+from ._multi_thread_wrapper import multi_thread_wrapper
