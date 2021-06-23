@@ -66,7 +66,7 @@ def download_from_url(url,
 
 def _test_multi_download():
     """测试多线程下载"""
-    from my.python import run_multi_thread
+    from my.python.ThreadUtils import run_multi_thread
 
     args_ls = [('https://www.baidu.com/', './-out/baidu1.html'),
                ('https://www.baidu.com/', './-out/baidu2.html'),

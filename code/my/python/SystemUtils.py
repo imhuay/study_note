@@ -36,3 +36,13 @@ def is_windows():
 def is_mac():
     """判断是否为 mac os 系统"""
     return _system_is('Darwin')
+
+
+def _test():
+    """"""
+    assert is_mac()
+
+
+if __name__ == '__main__':
+    """"""
+    _test()
