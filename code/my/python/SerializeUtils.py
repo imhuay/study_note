@@ -31,7 +31,7 @@ def str_to_bytes(s: str, encoding='utf8') -> bytes:
     return base64.b64decode(s.encode(encoding))
 
 
-def _test():
+def _test_all():
     test_file = r'./_test_data/pok.jpg'
     test_file_cp = r'./-out/pok_cp.jpg'
 
@@ -55,4 +55,4 @@ def _test():
 
 if __name__ == '__main__':
     """"""
-    _test()
+    _test_all()
