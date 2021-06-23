@@ -13,7 +13,7 @@ Subject:
 import functools
 from typing import Callable
 
-from my.basic import run_multi_thread
+from my.python import run_multi_thread
 
 
 def multi_thread_wrapper(args_iter, **kwargs):
